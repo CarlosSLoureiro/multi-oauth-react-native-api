@@ -1,0 +1,46 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.2/swagger-ui.css">
+  <style>
+    .topbar {
+      display: none;
+    }
+    .models {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.2/swagger-ui-bundle.js"> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.2/swagger-ui-standalone-preset.js"> </script>
+  <script>
+    window.onload = function () {
+      const ui = SwaggerUIBundle({
+        spec: {
+          openapi: "3.0.3",
+          info: {
+            title: "APP_NAME",
+            version: "APP_VERSION"
+          },
+          paths: SWAGGER_PATHS,
+          components: SWAGGER_COMPONENTS
+        },
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      })
+
+      window.ui = ui
+    }
+  </script>
+</body>
+</html>

@@ -1,5 +1,3 @@
-export default {
-  async fetch(request, env) {
-    return new Response("Hello world")
-  }
-}
+import Server from "./server";
+
+export default Server;

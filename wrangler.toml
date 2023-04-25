@@ -2,6 +2,7 @@ name = "api-multi-oauth2-react-native"
 main = "src/index.ts"
 compatibility_date = "2023-04-23"
 usage_model = "bundled"
+node_compat = false
 env = { }
 
 [triggers]

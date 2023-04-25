@@ -1,3 +1,7 @@
+# tmp
+.idea
+.DS_Store
+
 # Logs
 
 logs
