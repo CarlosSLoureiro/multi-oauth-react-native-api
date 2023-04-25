@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to Cloudflare Workers
 
 on:
   push:
@@ -8,14 +8,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: Deploy to Cloudflare Workers
     steps:
       - uses: actions/checkout@v2
-      - name: Publish
-        uses: cloudflare/wrangler-action@2.0.0
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+      
+      - name: Publish to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v2
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
         env:
           NAME: 'TEST'
-          VERSION: 'TEST'
+          VERSION: '1.0.0'
