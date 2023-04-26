@@ -20,7 +20,9 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          SECRETS: NAME VERSION
+          SECRETS: MYSQL_HOST MYSQL_USER MYSQL_PASS MYSQL_BASE
         env:
-          NAME: ${{ secrets.NAME }}
-          VERSION: ${{ secrets.VERSION }}
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASS: ${{ secrets.MYSQL_PASS }}
+          MYSQL_BASE: ${{ secrets.MYSQL_BASE }}
