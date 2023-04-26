@@ -6,3 +6,6 @@ node_compat = false
 
 [triggers]
 crons = [ ]
+
+[vars]
+NAME = "TESTE 0"

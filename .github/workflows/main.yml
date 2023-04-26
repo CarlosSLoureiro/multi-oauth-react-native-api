@@ -20,6 +20,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          SECRETS: NAME
+          SECRETS: NAME VERSION
         env:
           NAME: ${{ secrets.NAME }}
+          VERSION: ${{ secrets.VERSION }}
