@@ -21,5 +21,5 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
         env:
-          NAME: COOKIE: ${{ secrets.NAME }}
+          NAME: ${{ secrets.NAME }}
           VERSION: '1.0.0'
