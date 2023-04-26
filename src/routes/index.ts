@@ -5,7 +5,7 @@ import LoginsRoutes from "./login";
 import SwaggerRoutes from "./swagger";
 import Env from "../env";
 
-export abstract class Routes {
+export default abstract class Routes {
     public static init(router: Router<Env>) {
         const swaggerPaths = {};
 

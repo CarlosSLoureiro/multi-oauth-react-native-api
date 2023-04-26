@@ -1,8 +1,10 @@
+import 'reflect-metadata'
+
+import Env from './env';
 import { Router } from 'cloudworker-router';
 import { ExecutionContext } from '@cloudflare/workers-types';
-import { Routes } from './routes';
-import Env from './env';
 import { StatusCodes } from 'http-status-codes';
+import Routes from './routes';
 
 const router = new Router<Env>();
 

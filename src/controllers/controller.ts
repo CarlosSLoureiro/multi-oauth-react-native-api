@@ -1,7 +1,10 @@
 import { StatusCodes } from "http-status-codes";
+import { injectable } from "inversify";
 
-export default abstract class Controller { 
-    public static jsonResponse (data: any, status: number = StatusCodes.OK): Response {
+@injectable()
+
+export default class Controller { 
+    public jsonResponse (data: any, status: number = StatusCodes.OK): Response {
         return new Response(
             JSON.stringify(data) as BodyInit,
             {
