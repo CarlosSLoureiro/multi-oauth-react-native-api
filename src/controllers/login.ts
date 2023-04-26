@@ -1,13 +1,12 @@
 import Env from "../env";
 import { Context } from "cloudworker-router";
 import Controller from "./controller";
+import LoginService from "../services/login";
 
 export default class LoginController extends Controller { 
     public static async login(context: Context<Env>) {
-        const data = {
-            token: 'output example'
-        };
+        const service = new LoginService();
 
-        return Controller.jsonResponse(data);
+        return Controller.jsonResponse(await service.doLogin());
     }
 };
