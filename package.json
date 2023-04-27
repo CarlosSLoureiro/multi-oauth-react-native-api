@@ -11,7 +11,7 @@
   },
   "private": true,
   "scripts": {
-    "tsc": "tsc",
+    "test": "tsc --noEmit",
     "start": "wrangler dev --local",
     "deploy": "wrangler publish"
   },
