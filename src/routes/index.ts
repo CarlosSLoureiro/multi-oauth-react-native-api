@@ -1,15 +1,15 @@
-// import {createUser, loginUser} from '../controllers/UserController';
+import type Env from '@env';
 
-import { Router } from "cloudworker-router";
-import LoginsRoutes from "./login";
-import SwaggerRoutes from "./swagger";
-import Env from "../env";
+import { type Router } from 'cloudworker-router';
+
+import LoginsRoutes from '@routes/login';
+import SwaggerRoutes from '@routes/swagger';
 
 export default abstract class Routes {
-    public static init(router: Router<Env>) {
-        const swaggerPaths = {};
+  public static init (router: Router<Env>): void {
+    const swaggerPaths = {};
 
-        LoginsRoutes.init(router, swaggerPaths);
-        SwaggerRoutes.init(router, swaggerPaths);
-    }
+    LoginsRoutes.init(router, swaggerPaths);
+    SwaggerRoutes.init(router, swaggerPaths);
+  }
 }

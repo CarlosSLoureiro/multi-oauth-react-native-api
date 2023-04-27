@@ -12,7 +12,20 @@
     "declaration": false,
     "pretty": true,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "paths": {
+      "@env": ["env"],
+      "@server": ["server"],
+      "@container": ["container"],
+      "@controller": ["controllers/controller"],
+      "@containers/*": ["containers/*"],
+      "@controllers/*": ["controllers/*"],
+      "@services/*": ["services/*"],
+      "@docs/*": ["docs/*"],
+      "@routes": ["routes/index"],
+      "@routes/*": ["routes/*"],
+    },
   },
   "include": [
     "src/**/*.ts",

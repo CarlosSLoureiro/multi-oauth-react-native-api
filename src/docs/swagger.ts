@@ -1,8 +1,9 @@
-import Env from '../env';
-import * as html from './swagger.html';
-import swaggerComponents from './swagger/components';
+import type Env from '@env';
 
-export function MountSwaggerUI(env: Env, swaggerPaths: Object): String {
+import swaggerComponents from './swagger/components';
+import * as html from './swagger.html';
+
+export function MountSwaggerUI (env: Env, swaggerPaths: Object): string {
   return html.default
     .replace('SWAGGER_PATHS', JSON.stringify(swaggerPaths))
     .replace('SWAGGER_COMPONENTS', JSON.stringify(swaggerComponents))
