@@ -6,7 +6,7 @@ import { type LoginResponse } from './login.types';
 
 export default class LoginService {
   constructor (
-    private readonly userRepository: string = 'test'
+    private readonly userRepository: string = `test`
   ) {}
 
   public async doLogin (): Promise<LoginResponse> {

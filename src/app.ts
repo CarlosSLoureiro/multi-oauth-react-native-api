@@ -1,4 +1,8 @@
-import { config as configEnvironment } from 'dotenv';
+import 'reflect-metadata';
+
+import Routes from '@routes';
+
+import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
 
 export default class App {
@@ -6,16 +10,14 @@ export default class App {
   private readonly router: Router = Router();
 
   constructor () {
-    configEnvironment();
-
-    this.router.get(`/`, (req, res) => {
-      res.send(`Hello World!`);
-    });
+    doenv.config();
 
     this.app.use(this.router);
 
+    Routes.init(this.router);
+
     this.app.listen(process.env.SERVER_PORT, () => {
-      console.info(`Api started ${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`);
+      console.log(`\x1b[1m\x1b[30m\x1b[47m`, `${process.env.NAME} started at ${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`, `\x1b[0m`);
     });
   }
 }
