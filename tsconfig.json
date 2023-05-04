@@ -1,12 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "ESNext",                          
-    "module": "CommonJS",                    
+    "target": "ESNext",
+    "module": "CommonJS",
     "allowJs": true,
-    "outDir": "dist",                          
+    "outDir": "dist",
     "rootDir": "src",
-    "strict": false,         
+    "strict": false,
     "noImplicitAny": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -29,8 +29,7 @@
     },
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.html",
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
