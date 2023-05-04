@@ -9,6 +9,6 @@ export default abstract class Routes {
     const swaggerPaths = {};
 
     LoginsRoutes.init(router, swaggerPaths);
-    // SwaggerRoutes.init(router, swaggerPaths);
+    SwaggerRoutes.init(router, swaggerPaths);
   }
 }

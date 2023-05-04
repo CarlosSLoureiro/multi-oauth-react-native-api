@@ -1,25 +1,11 @@
-import type Env from '@env';
+import { MountSwaggerConfig } from "@docs/swagger";
 
-import { type Router } from 'cloudworker-router';
-
-import { MountSwaggerUI } from '@docs/swagger';
-
-import { StatusCodes } from 'http-status-codes';
+import { type Router } from "express";
+import * as swaggerUi from "swagger-ui-express";
 
 export default abstract class SwaggerRoutes {
-  public static init (router: Router<Env>, swaggerPaths: object): void {
-    router.get('/swagger', async context => {
-      const data = MountSwaggerUI(context.env, swaggerPaths);
-
-      return await Promise.resolve(new Response(
-        data as BodyInit,
-        {
-          headers: {
-            'Content-Type': 'text/html'
-          },
-          status: StatusCodes.OK
-        }
-      ));
-    });
+  public static init (router: Router, swaggerPaths: object): void {
+    router.use(`/swagger`, swaggerUi.serve);
+    router.get(`/swagger`, swaggerUi.setup(...MountSwaggerConfig(swaggerPaths)));
   }
 }

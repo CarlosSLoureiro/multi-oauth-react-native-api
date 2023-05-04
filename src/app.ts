@@ -18,6 +18,7 @@ export default class App {
 
     this.app.listen(process.env.SERVER_PORT, () => {
       console.log(`\x1b[1m\x1b[30m\x1b[47m`, `${process.env.NAME} started at ${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`, `\x1b[0m`);
+      console.log(`\x1b[1m\x1b[30m\x1b[47m`, `Access ${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/swagger for API documentation`, `\x1b[0m`);
     });
   }
 }
