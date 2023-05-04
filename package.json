@@ -19,7 +19,7 @@
   },
   "private": true,
   "scripts": {
-    "test": "tsc --noEmit && eslint . --ext .ts",
+    "test": "tsc --noEmit && eslint . --ext .ts && eslint --ignore-path .gitignore . --fix --quiet",
     "tsc": "tsc",
     "lint": "",
     "start": "nodemon",
