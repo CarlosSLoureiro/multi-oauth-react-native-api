@@ -1,12 +1,12 @@
 export default {
   schemas: {
     Error: {
-      message: '',
-      required: ['message'],
+      message: ``,
+      required: [`message`],
       properties: {
         message: {
-          type: 'string',
-          description: 'Description of the error response'
+          type: `string`,
+          description: `Description of the error response`
         }
       }
     }
@@ -14,14 +14,14 @@ export default {
   parameters: {},
   responses: {
     BadRequest: {
-      description: 'Invalid request',
+      description: `Invalid request`,
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/Error'
+            $ref: `#/components/schemas/Error`
           },
           example: {
-            message: 'User not found'
+            message: `User not found`
           }
         }
       }
