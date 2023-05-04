@@ -1,19 +1,13 @@
 import { injectable } from 'inversify';
 
-import { StatusCodes } from 'http-status-codes';
+import { type NextFunction, type Request, type Response } from 'express';
 
 @injectable()
 
-export default class Controller {
-  public jsonResponse (data: any, status: number = StatusCodes.OK): Response {
-    return new Response(
-      JSON.stringify(data) as BodyInit,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        status
-      }
-    );
+export default abstract class Controller {
+  static getAsync (fn: (request: Request, response: Response, next: NextFunction) => Promise<any>) {
+    return (request: Request, response: Response, next: NextFunction) => {
+      Promise.resolve(fn(request, response, next)).catch(next);
+    };
   }
 }

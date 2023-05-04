@@ -1,22 +1,23 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2021",
-    "module": "es2022",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "target": "ESNext",                          
+    "module": "CommonJS",                    
+    "allowJs": true,
+    "outDir": "dist",                          
+    "rootDir": "src",
+    "strict": false,         
+    "noImplicitAny": false,
     "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "sourceMap": true,
-    "declaration": false,
-    "pretty": true,
-    "strictNullChecks": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "skipLibCheck": true,
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
       "@env": ["env"],
-      "@server": ["server"],
+      "@app": ["app"],
       "@container": ["container"],
       "@controller": ["controllers/controller"],
       "@containers/*": ["containers/*"],
@@ -29,7 +30,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "index.ts"
+    "src/**/*.html",
   ],
   "exclude": [
     "node_modules"

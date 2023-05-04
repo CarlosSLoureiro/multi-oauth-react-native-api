@@ -1,3 +1,3 @@
-import Server from '@server';
+import App from '@app';
 
-export default Server;
+export default new App();
