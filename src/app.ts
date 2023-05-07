@@ -2,15 +2,19 @@ import 'reflect-metadata';
 
 import Routes from '@routes';
 
+import Database from 'database';
 import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
 
 export default class App {
   private readonly app: Application = express();
   private readonly router: Router = Router();
+  private readonly database: Database = new Database();
 
   constructor () {
     doenv.config();
+
+    void this.database.init();
 
     this.app.use(this.router);
 

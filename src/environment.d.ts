@@ -6,6 +6,10 @@ declare global {
       SERVER_PROTOCOL: string;
       SERVER_HOST: string;
       SERVER_PORT: number;
+      MYSQL_HOST: string;
+      MYSQL_USER: string;
+      MYSQL_PASS: string;
+      MYSQL_BASE: string;
     }
   }
 }
