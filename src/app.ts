@@ -20,9 +20,9 @@ export default class App {
 
     Routes.init(this.router);
 
-    this.app.listen(process.env.SERVER_PORT, () => {
-      console.log(`\x1b[1m\x1b[30m\x1b[47m`, `${process.env.NAME} started at ${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`, `\x1b[0m`);
-      console.log(`\x1b[1m\x1b[30m\x1b[47m`, `Access ${process.env.SERVER_PROTOCOL}${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/swagger for API documentation`, `\x1b[0m`);
+    this.app.listen(process.env.API_PORT, () => {
+      console.log(`\x1b[1m\x1b[30m\x1b[47m`, `${process.env.API_NAME} started at ${process.env.API_PROTOCOL}${process.env.API_HOST}:${process.env.API_PORT}`, `\x1b[0m`);
+      console.log(`\x1b[1m\x1b[30m\x1b[47m`, `Access ${process.env.API_PROTOCOL}${process.env.API_HOST}:${process.env.API_PORT}/swagger for API documentation`, `\x1b[0m`);
     });
   }
 }
