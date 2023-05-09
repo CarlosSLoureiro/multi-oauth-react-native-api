@@ -1,3 +1,5 @@
+import User from "@models/user";
+
 import { Sequelize } from "sequelize";
 
 export default class Database {
@@ -9,14 +11,12 @@ export default class Database {
       dialect: `mysql`
     });
 
-    /*
-    const models = [];
+    const models = [User];
 
-    models.forEach(model => model.initialize(this.sequelize));
-    */
+    models.forEach(model => { model.initialize(this.sequelize); });
 
     try {
-      await this.sequelize.sync({ force: true });
+      await this.sequelize.sync({ force: false });
       console.log(`\x1b[32m`, `Successfully connected to the Database!`, `\x1b[0m`);
     } catch (e) {
       console.log(e);
