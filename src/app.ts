@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 
+import Auth from '@auth';
 import Routes from '@routes';
 
 import Database from 'database';
 import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
-
 export default class App {
   private readonly app: Application = express();
   private readonly router: Router = Router();
@@ -15,6 +15,8 @@ export default class App {
     doenv.config();
 
     void this.database.init();
+
+    Auth.init(this.app);
 
     this.app.use(this.router);
 
