@@ -30,10 +30,10 @@
             "groups": [
                 ["reflect-metadata"],
                 ["@env", "@server", "@container"],
-                ["inversify", "^@cloudflare/?\\w", "cloudworker-router"],
-                ["^@containers/?\\w"],
+                ["inversify"],
+                ["^@containers/?\\w", "^@models/?\\w"],
                 ["controller", "^@controllers/?\\w", "^@services/?\\w"],
-                ["@routes", "^@routes/?\\w"],
+                ["@auth", "@routes", "^@routes/?\\w"],
                 ["^@docs/?\\w"],
                 ["^\\u0000"],
                 ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
