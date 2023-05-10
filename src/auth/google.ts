@@ -1,28 +1,22 @@
-import { type Application } from "express";
-import passport from 'passport';
-import { OAuth2Strategy } from 'passport-google-oauth';
+import { type Request } from 'express';
+import passport, { type Profile } from 'passport';
+import { OAuth2Strategy, type VerifyFunction } from 'passport-google-oauth';
 
 export default abstract class GoogleAuth {
-  private static readonly route = `google`;
+  private static readonly verify = (req: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyFunction): void => {
+    req.body = profile;
+    done(null, profile);
+  };
 
-  public static config (app: Application): void {
-    passport.use(new OAuth2Strategy({
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.API_PROTOCOL}${process.env.API_HOST}:${process.env.API_PORT}/auth/${this.route}/callback`,
-      passReqToCallback: true
-    },
-    function (req, accessToken, refreshToken, profile, done) {
-      req.body = profile;
-      done(null, profile);
-    }
+  public static config (): void {
+    passport.use(new OAuth2Strategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: `${process.env.API_PROTOCOL}${process.env.API_HOST}:${process.env.API_PORT}/auth/google/callback`,
+        passReqToCallback: true
+      },
+      this.verify
     ));
-
-    app.get(`/auth/${this.route}`, passport.authenticate(`google`, { scope: [`profile`, `email`], session: false }));
-
-    app.get(`/auth/${this.route}/callback`, passport.authenticate(`google`, { failureRedirect: `/auth/error`, session: false }),
-      function (req, res) {
-        res.json(req.body);
-      });
   }
 }

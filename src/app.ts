@@ -16,7 +16,7 @@ export default class App {
 
     void this.database.config();
 
-    Auth.config(this.app);
+    Auth.config();
 
     Routes.config(this.router);
 
