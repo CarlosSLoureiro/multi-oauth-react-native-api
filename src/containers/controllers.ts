@@ -1,9 +1,9 @@
 import { type Container } from 'inversify';
 
-import LoginController from '@controllers/login';
+import AuthController from '@controllers/auth';
 
 export default abstract class ReigsterControllers {
-  public static init (container: Container): void {
-    container.bind<LoginController>(LoginController).toSelf();
+  public static config (container: Container): void {
+    container.bind<AuthController>(AuthController).toSelf();
   }
 }
