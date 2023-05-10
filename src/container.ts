@@ -5,7 +5,7 @@ import ReigsterServices from '@containers/services';
 
 const container = new Container();
 
-ReigsterControllers.init(container);
-ReigsterServices.init(container);
+ReigsterControllers.config(container);
+ReigsterServices.config(container);
 
 export default container;

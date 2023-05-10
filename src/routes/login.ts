@@ -8,7 +8,7 @@ import swaggerData from '@docs/swagger/login';
 import { type Router } from 'express';
 
 export default abstract class LoginsRoutes {
-  public static init (router: Router, swaggerPaths: object): void {
+  public static config (router: Router, swaggerPaths: object): void {
     const loginController = container.get<LoginController>(LoginController);
 
     swaggerPaths[`/login`] = swaggerData;

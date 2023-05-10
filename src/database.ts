@@ -5,7 +5,7 @@ import { Sequelize } from "sequelize";
 export default class Database {
   private sequelize: Sequelize;
 
-  public async init (): Promise<void> {
+  public async config (): Promise<void> {
     this.sequelize = new Sequelize(process.env.MYSQL_BASE, process.env.MYSQL_USER, process.env.MYSQL_PASS, {
       host: process.env.MYSQL_HOST,
       dialect: `mysql`

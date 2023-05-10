@@ -5,7 +5,7 @@ import { OAuth2Strategy } from 'passport-google-oauth';
 export default abstract class GoogleAuth {
   private static readonly route = `google`;
 
-  public static init (app: Application): void {
+  public static config (app: Application): void {
     passport.use(new OAuth2Strategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
