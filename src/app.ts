@@ -20,6 +20,8 @@ export default class App {
 
     Routes.config(this.router);
 
+    this.app.use(express.json());
+
     this.app.use(this.router);
 
     this.app.listen(process.env.API_PORT, () => {
