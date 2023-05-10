@@ -3,21 +3,21 @@ import container from '@container';
 import { injectable } from 'inversify';
 
 import Controller from '@controller';
-import LoginService from '@services/login';
+import AuthService from '@services/auth';
 
 import { type NextFunction, type Request, type Response } from 'express';
 import { type Profile } from 'passport';
 
 @injectable()
 
-export default class LoginController extends Controller {
+export default class AuthController extends Controller {
   public async authenticateWithPassword (request: Request, response: Response, next: NextFunction): Promise<Response> {
     try {
-      const loginService = container.get<LoginService>(LoginService);
+      const authService = container.get<AuthService>(AuthService);
 
       const { email, password } = request.body;
 
-      return response.json(await loginService.authenticateWithPassword(email, password));
+      return response.json(await authService.authenticateWithPassword(email, password));
     } catch (e) {
       next(e);
     }
@@ -25,10 +25,10 @@ export default class LoginController extends Controller {
 
   public async authenticateWithOAuthProfile (request: Request, response: Response, next: NextFunction): Promise<Response> {
     try {
-      const loginService = container.get<LoginService>(LoginService);
+      const authService = container.get<AuthService>(AuthService);
       const profile: Profile = request.body;
 
-      return response.json(await loginService.authenticateWithOAuthProfile(profile));
+      return response.json(await authService.authenticateWithOAuthProfile(profile));
     } catch (e) {
       next(e);
     }

@@ -1,9 +1,9 @@
 import { type Container } from 'inversify';
 
-import LoginService from '@services/login';
+import AuthService from '@services/auth';
 
 export default abstract class ReigsterServices {
   public static config (container: Container): void {
-    container.bind<LoginService>(LoginService).toSelf();
+    container.bind<AuthService>(AuthService).toSelf();
   }
 }

@@ -1,26 +1,26 @@
 import { injectable } from 'inversify';
 
-import { type LoginResponse } from './login.types';
+import { type AuthResponse } from './auth.types';
 
 import { type Profile } from 'passport';
 
 @injectable()
 
-export default class LoginService {
+export default class AuthService {
   constructor (
     private readonly userRepository: string = `test`
   ) {}
 
-  public async authenticateWithPassword (email: string, password: string): Promise<LoginResponse> {
-    const data: LoginResponse = {
+  public async authenticateWithPassword (email: string, password: string): Promise<AuthResponse> {
+    const data: AuthResponse = {
       token: `Must search user & create token for "${email}: ${password}" example`
     };
 
     return await Promise.resolve(data);
   }
 
-  public async authenticateWithOAuthProfile (profile: Profile): Promise<LoginResponse> {
-    const data: LoginResponse = {
+  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponse> {
+    const data: AuthResponse = {
       token: `must search or create new user & create token for "${profile.emails[0].value}"`
     };
 
