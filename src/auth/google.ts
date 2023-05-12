@@ -13,7 +13,7 @@ export default abstract class GoogleAuth {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${process.env.API_PROTOCOL}${process.env.API_HOST}:${process.env.API_PORT}/auth/google/callback`,
+        callbackURL: `/auth/google/callback`,
         passReqToCallback: true
       },
       this.verify
