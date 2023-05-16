@@ -2,16 +2,17 @@ import container from '@container';
 
 import { injectable } from 'inversify';
 
-import Controller from '@controller';
 import AuthService from '@services/auth';
+
+import ControllersUtils from './utils';
 
 import { type NextFunction, type Request, type Response } from 'express';
 import { type Profile } from 'passport';
 
 @injectable()
 
-export default class AuthController extends Controller {
-  public async authenticateWithPassword (request: Request, response: Response, next: NextFunction): Promise<Response> {
+export default class AuthController {
+  public async authenticateWithPassword (request: Request, response: Response, next: NextFunction): Promise<Response | undefined> {
     try {
       const authService = container.get<AuthService>(AuthService);
 
@@ -23,12 +24,15 @@ export default class AuthController extends Controller {
     }
   }
 
-  public async authenticateWithOAuthProfile (request: Request, response: Response, next: NextFunction): Promise<Response> {
+  public async authenticateWithOAuthProfile (request: Request, response: Response, next: NextFunction): Promise<void> {
     try {
       const authService = container.get<AuthService>(AuthService);
+
       const profile: Profile = request.body;
 
-      return response.json(await authService.authenticateWithOAuthProfile(profile));
+      const data = await authService.authenticateWithOAuthProfile(profile);
+
+      ControllersUtils.redirectToDeepOrQueryLink(request, response, data);
     } catch (e) {
       next(e);
     }

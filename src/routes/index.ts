@@ -9,6 +9,13 @@ export default abstract class Routes {
     const swaggerPaths = {};
 
     AuthRoutes.config(router, swaggerPaths);
+
+    /* Should not config swagger routes in production but it is for educational purposes...
+
+    if (process.env.API_ENV === `development`) {
+      SwaggerRoutes.config(router, swaggerPaths);
+    }
+    */
     SwaggerRoutes.config(router, swaggerPaths);
   }
 }

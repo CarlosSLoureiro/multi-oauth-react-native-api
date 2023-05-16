@@ -1,15 +1,19 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
 import { type AuthResponse } from './auth.types';
 
+import UserRepository from '@repository/user';
+import UserRepositoryInterface from '@repository/user.interface';
 import { type Profile } from 'passport';
 
 @injectable()
 
 export default class AuthService {
-  constructor (
-    private readonly userRepository: string = `test`
-  ) {}
+  private readonly userRepository: UserRepositoryInterface;
+
+  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface) {
+    this.userRepository = userRepository;
+  }
 
   public async authenticateWithPassword (email: string, password: string): Promise<AuthResponse> {
     const data: AuthResponse = {
@@ -19,11 +23,23 @@ export default class AuthService {
     return await Promise.resolve(data);
   }
 
-  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponse> {
-    const data: AuthResponse = {
-      token: `must search or create new user & create token for "${profile.emails[0].value}"`
-    };
+  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponse | undefined> {
+    if (profile.emails && profile.emails.length > 0) {
+      const email = profile.emails[0].value;
+      let user = await this.userRepository.findUserByEmail(email);
 
-    return await Promise.resolve(data);
+      if (user === null) {
+        user = await this.userRepository.create({
+          name: profile.displayName,
+          email
+        });
+      }
+
+      const data: AuthResponse = {
+        token: `must search or create new user & create token for "${user.name} (${Number(user.id)})"`
+      };
+
+      return data;
+    }
   }
 }
