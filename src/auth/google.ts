@@ -9,14 +9,18 @@ export default abstract class GoogleAuth {
   };
 
   public static config (): void {
-    passport.use(new OAuth2Strategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `/auth/google/callback`,
-        passReqToCallback: true
-      },
-      this.verify
-    ));
+    const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
+
+    passport.use(
+      new OAuth2Strategy(
+        {
+          clientID: GOOGLE_CLIENT_ID,
+          clientSecret: GOOGLE_CLIENT_SECRET,
+          callbackURL: `/auth/google/callback`,
+          passReqToCallback: true
+        },
+        this.verify
+      )
+    );
   }
 }
