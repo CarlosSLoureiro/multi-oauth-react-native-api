@@ -14,11 +14,13 @@ export default abstract class ControllersUtils {
     const encrypted = encodeURIComponent(CryptoJS.AES.encrypt(jsonResponse, `CARLOS LOUREIRO`).toString());
     let url: string;
 
+    const { API_ENV, CLIENT_DOMAIN } = process.env;
+
     if (ControllersUtils.wasRequestedFromMobile(request)) {
       const expoPort = 19000;
-      url = process.env.API_ENV === `development` ? `exp://${String(ip.address())}:${expoPort}/--/` : `myapptest://`;
+      url = API_ENV === `development` ? `exp://${String(ip.address())}:${expoPort}/--/` : `myapptest://`;
     } else {
-      url = process.env.API_ENV === `development` ? request.headers.referer : process.env.CLIENT_DOMAIN;
+      url = API_ENV === `development` && request.headers.referer ? request.headers.referer : CLIENT_DOMAIN;
     }
 
     response.redirect(`${url}?data=${encrypted}`);
