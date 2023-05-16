@@ -6,14 +6,13 @@ import AuthService from '@services/auth';
 
 import ControllersUtils from './utils';
 
-import CryptoJS from "crypto-js";
 import { type NextFunction, type Request, type Response } from 'express';
 import { type Profile } from 'passport';
 
 @injectable()
 
 export default class AuthController {
-  public async authenticateWithPassword (request: Request, response: Response, next: NextFunction): Promise<Response> {
+  public async authenticateWithPassword (request: Request, response: Response, next: NextFunction): Promise<Response | undefined> {
     try {
       const authService = container.get<AuthService>(AuthService);
 
