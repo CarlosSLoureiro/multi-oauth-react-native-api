@@ -2,7 +2,6 @@ import container from '@container';
 
 import { injectable } from 'inversify';
 
-import Controller from '@controller';
 import AuthService from '@services/auth';
 
 import CryptoJS from "crypto-js";
@@ -11,7 +10,7 @@ import { type Profile } from 'passport';
 
 @injectable()
 
-export default class AuthController extends Controller {
+export default class AuthController {
   public async authenticateWithPassword (request: Request, response: Response, next: NextFunction): Promise<Response> {
     try {
       const authService = container.get<AuthService>(AuthService);
