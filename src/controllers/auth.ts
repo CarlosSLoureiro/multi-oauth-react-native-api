@@ -4,6 +4,8 @@ import { injectable } from 'inversify';
 
 import AuthService from '@services/auth';
 
+import ControllersUtils from './utils';
+
 import CryptoJS from "crypto-js";
 import { type NextFunction, type Request, type Response } from 'express';
 import { type Profile } from 'passport';
@@ -26,23 +28,12 @@ export default class AuthController {
   public async authenticateWithOAuthProfile (request: Request, response: Response, next: NextFunction): Promise<void> {
     try {
       const authService = container.get<AuthService>(AuthService);
+
       const profile: Profile = request.body;
 
-      const jsonResponse = JSON.stringify(await authService.authenticateWithOAuthProfile(profile));
+      const data = await authService.authenticateWithOAuthProfile(profile);
 
-      const userAgent = request.headers[`user-agent`];
-
-      const isMobile = ((/android/i.test(userAgent)) || (/iPad|iPhone|iPod/.test(userAgent)));
-
-      const encrypted = encodeURIComponent(CryptoJS.AES.encrypt(jsonResponse, `CARLOS LOUREIRO`).toString());
-
-      if (isMobile) {
-        console.log(`solicitou do mobile`);
-        response.redirect(`exp://192.168.0.108:19000/--/login?data=${encrypted}`);
-      } else {
-        console.log(`solicitou do web`);
-        response.redirect(`http://localhost:19006/?login=${encrypted}`);
-      }
+      ControllersUtils.redirectToDeepOrQueryLink(request, response, data);
     } catch (e) {
       next(e);
     }

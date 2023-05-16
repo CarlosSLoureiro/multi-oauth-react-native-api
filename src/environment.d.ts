@@ -7,6 +7,8 @@ declare global {
       API_VERSION: string;
       API_PORT: number;
 
+      CLIENT_DOMAIN: string;
+
       MYSQL_HOST: string;
       MYSQL_USER: string;
       MYSQL_PASS: string;
