@@ -1,38 +1,26 @@
-import { DataTypes, Model, type Sequelize } from "sequelize";
+import type UserInterface from './user.interface';
 
-export default class User extends Model {
-  public id!: number;
-  public name!: string;
-  public email!: string;
-  public password!: string;
+import { DataTypes, type Optional } from 'sequelize';
+import { AllowNull, Column, Model, NotEmpty, Table, Unique } from 'sequelize-typescript';
 
-  public static initialize (sequelize: Sequelize): void {
-    this.init(
-      {
-        id: {
-          type: DataTypes.INTEGER.UNSIGNED,
-          autoIncrement: true,
-          primaryKey: true
-        },
-        name: {
-          type: DataTypes.STRING(50),
-          allowNull: false
-        },
-        email: {
-          type: DataTypes.STRING(100),
-          allowNull: false,
-          unique: true
-        },
-        password: {
-          type: DataTypes.STRING(100),
-          allowNull: true
-        }
-      },
-      {
-        sequelize,
-        tableName: `users`,
-        timestamps: true
-      }
-    );
-  }
+@Table({
+  tableName: `users`,
+  freezeTableName: true,
+  timestamps: true
+})
+
+export default class User extends Model<UserInterface, Optional<UserInterface, 'id'>> implements UserInterface {
+  @AllowNull(false)
+  @NotEmpty
+  @Column(DataTypes.STRING)
+  declare name: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Unique
+  @Column(DataTypes.STRING)
+  declare email: string;
+
+  @Column(DataTypes.STRING)
+  declare password?: string | null;
 }
