@@ -1,13 +1,13 @@
 import { Container } from 'inversify';
 
-import ReigsterControllers from '@containers/controllers';
-import ReigsterRepositories from '@containers/repositories';
-import ReigsterServices from '@containers/services';
+import RegisterControllers from '@containers/controllers';
+import RegisterRepositories from '@containers/repositories';
+import RegisterServices from '@containers/services';
 
 const container = new Container();
 
-ReigsterControllers.config(container);
-ReigsterRepositories.config(container);
-ReigsterServices.config(container);
+RegisterControllers.config(container);
+RegisterRepositories.config(container);
+RegisterServices.config(container);
 
 export default container;
