@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      NAME: API for Multi OAuth 2 with React Native
       IMAGE_NAME: api-multi-oauth2-react-native
       SERVICE_NAME: api-multi-oauth2-react-native-service
       REPLICAS: 1
@@ -62,14 +63,16 @@ jobs:
             git fetch --tags && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
 
       - name: Set up Environment Variables
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          path: .env
-          env_API_ENV: production
-          env_API_NAME: API for Multi OAuth 2 with React Native
-          env_API_VERSION: ${{ steps.latest_tag.outputs.TAG }}
-          env_API_PORT: ${{ env.PORT_CONTAINER }}
-          env_CLIENT_DOMAIN: https://web-version-app.carlosloureiro.xyz/
+        run: |
+          if [ -f .env ]; then
+            rm .env
+          fi
+
+          touch .env
+          echo API_ENV=production >> .env
+          echo API_ENV=${{ env.NAME }} >> .env
+          echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
+          echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
 
       - name: Build Application Image
         run: docker build -t ${{ env.IMAGE_NAME }} .
