@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - '*'
+
+  release:
+    types:
+      - created
+
+jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 19
+        uses: actions/setup-node@v2
+        with:
+          node-version: '19'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    name: Deploy Application
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/')
+
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: api-multi-oauth2-react-native
+      SERVICE_NAME: api-multi-oauth2-react-native-service
+      REPLICAS: 1
+      PORT_CONTAINER: 80
+      PORT_PROXY: 3000 # Porta usada no nginx para o proxy
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          echo "::set-output name=TAG::$(git describe --tags $(git rev-list --tags --max-count=1))"
+
+      - name: Pull lastest tag via SSH
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /var/carlos-loureiro/apis/multi-oauth2-react-native-api
+            git fetch --tags && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+
+      - name: Set up Environment Variables
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          path: .env
+          env_API_ENV: production
+          env_API_NAME: API for Multi OAuth 2 with React Native
+          env_API_VERSION: ${{ steps.latest_tag.outputs.TAG }}
+          env_API_PORT: ${{ env.PORT_CONTAINER }}
+          env_CLIENT_DOMAIN: https://web-version-app.carlosloureiro.xyz/
+
+      - name: Build Application Image
+        run: docker build -t ${{ env.IMAGE_NAME }} .
+
+      - name: Deploy Application to Swarm
+        run: |
+          if docker service ls --format '{{.Name}}' | grep -q "^${{ env.SERVICE_NAME }}$"; then
+            docker service update --force --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}
+          else
+            docker service create --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}
+          fi
+
+          docker rm $(docker ps -q -f status=exited --filter "label=com.docker.swarm.service.name=${{ env.SERVICE_NAME }}")
