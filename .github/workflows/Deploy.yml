@@ -1,11 +1,9 @@
-name: Application CI
+name: Deploy
 
 on:
   push:
-
-  release:
-    types:
-      - created
+    tags:
+      - '*'
 
 jobs:
   test:
@@ -20,16 +18,15 @@ jobs:
         with:
           node-version: 19
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Run Tests
         run: npm test
 
   deploy:
     name: Deploy Application
     needs: test
-    if: startsWith(github.ref, 'refs/tags/')
 
     runs-on: ubuntu-latest
 
@@ -43,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Get latest tag
         id: latest_tag
