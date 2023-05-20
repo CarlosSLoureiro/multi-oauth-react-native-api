@@ -34,7 +34,7 @@ jobs:
       NAME: API for Multi OAuth 2 with React Native
       IMAGE_NAME: api-multi-oauth2-react-native
       SERVICE_NAME: api-multi-oauth2-react-native-service
-      REPLICAS: 1
+      REPLICAS: 3
       PORT_CONTAINER: 80
       PORT_PROXY: 3000 # Porta usada no nginx para o proxy
 
