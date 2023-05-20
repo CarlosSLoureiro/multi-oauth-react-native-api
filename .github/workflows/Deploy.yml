@@ -66,9 +66,11 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd ${{ env.DIR }}
+            
             if [ -f .env ]; then
               rm .env
             fi
+
             touch .env
             echo API_ENV=production >> .env
             echo API_ENV=${{ env.NAME }} >> .env
@@ -82,6 +84,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            cd ${{ env.DIR }}
             docker build -t ${{ env.IMAGE_NAME }} .
 
       - name: Deploy Application to Swarm
@@ -91,6 +94,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            cd ${{ env.DIR }}
+
             if docker service ls --format '{{.Name}}' | grep -q "^${{ env.SERVICE_NAME }}$"; then
               docker service update --force --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}
             else
