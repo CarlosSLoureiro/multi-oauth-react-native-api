@@ -94,12 +94,21 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{ env.DIR }}
-
             if docker service ls --format '{{.Name}}' | grep -q "^${{ env.SERVICE_NAME }}$"; then
               docker service update --force --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}
             else
               docker service create --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}
             fi
 
-            docker rm $(docker ps -q -f status=exited --filter "label=com.docker.swarm.service.name=${{ env.SERVICE_NAME }}")
+      - name: Clear Exited Containers
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            container_ids=$(docker ps -q -f status=exited --filter "label=com.docker.swarm.service.name=${{ env.SERVICE_NAME }}")
+
+            if [[ -n $container_ids ]]; then
+              docker rm $container_ids
+            fi
