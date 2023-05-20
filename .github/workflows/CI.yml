@@ -1,6 +1,8 @@
-name: Deploy
+name: Application CI
 
 on:
+  push:
+
   release:
     types:
       - created
