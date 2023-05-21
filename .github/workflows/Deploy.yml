@@ -38,6 +38,7 @@ jobs:
       REPLICAS: 3
       PORT_CONTAINER: 80
       PORT_PROXY: 3000 # Porta usada no nginx para o proxy
+      CLIENT_DOMAIN: https://web-multi-oauth2.carlosloureiro.xyz/
 
     steps:
       - name: Checkout code
@@ -73,9 +74,20 @@ jobs:
 
             touch .env
             echo API_ENV=production >> .env
-            echo API_ENV=${{ env.NAME }} >> .env
+
+            echo API_NAME=${{ env.NAME }} >> .env
             echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
             echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
+
+            echo MYSQL_HOST=${{ secrets.MYSQL_HOST }} >> .env
+            echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .env
+            echo MYSQL_PASS=${{ secrets.MYSQL_PASS }} >> .env
+            echo MYSQL_BASE=${{ secrets.MYSQL_BASE }} >> .env
+
+            echo CLIENT_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
+
+            echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+            echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
 
       - name: Build Application Image
         uses: appleboy/ssh-action@v0.1.8
