@@ -1,0 +1,126 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 19
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+  deploy:
+    name: Deploy Application
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    env:
+      NAME: API for Multi OAuth 2 with React Native
+      DIR: /var/carlos-loureiro/apis/multi-oauth2-react-native-api
+      IMAGE_NAME: multi-oauth2-react-native-api
+      SERVICE_NAME: multi-oauth2-react-native-api-service
+      REPLICAS: 3
+      PORT_CONTAINER: 80
+      PORT_PROXY: 3000 # Porta usada no nginx para o proxy
+      CLIENT_DOMAIN: https://web-multi-oauth2.carlosloureiro.xyz/
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          echo "::set-output name=TAG::$(git describe --tags $(git rev-list --tags --max-count=1))"
+
+      - name: Pull lastest Release
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ${{ env.DIR }}
+            git fetch --tags && git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+
+      - name: Set-up Environment Variables
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ${{ env.DIR }}
+            
+            if [ -f .env ]; then
+              rm .env
+            fi
+
+            touch .env
+            echo API_ENV=production >> .env
+
+            echo API_NAME=${{ env.NAME }} >> .env
+            echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
+            echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
+
+            echo MYSQL_HOST=${{ secrets.MYSQL_HOST }} >> .env
+            echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .env
+            echo MYSQL_PASS=${{ secrets.MYSQL_PASS }} >> .env
+            echo MYSQL_BASE=${{ secrets.MYSQL_BASE }} >> .env
+
+            echo CLIENT_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
+
+            echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+            echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
+
+      - name: Build Application Image
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd ${{ env.DIR }}
+            docker build -t ${{ env.IMAGE_NAME }} .
+
+      - name: Deploy Application to Swarm
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            if docker service ls --format '{{.Name}}' | grep -q "^${{ env.SERVICE_NAME }}$"; then
+              docker service update --force --quiet --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}
+            else
+              docker service create --quiet --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}
+            fi
+
+      - name: Clear Exited Containers
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            container_ids=$(docker ps -q -f status=exited --filter "label=com.docker.swarm.service.name=${{ env.SERVICE_NAME }}")
+
+            if [[ -n $container_ids ]]; then
+              docker rm $container_ids
+            fi

@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 19
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
