@@ -4,6 +4,8 @@ import AuthController from '@controllers/auth';
 
 import swaggerData from '@docs/swagger/auth';
 
+import setClientData from '@utils/client-data/set';
+
 import RoutesUtils from './utils';
 
 import { type Router } from 'express';
@@ -16,9 +18,9 @@ export default abstract class AuthRoutes {
     swaggerPaths[`/auth`] = swaggerData;
     router.post(`/auth`, RoutesUtils.getAsync(authController.authenticateWithPassword));
 
-    // router.get(`/auth/error`, (request: Request, response: Response) => response.json({ status: `Authentication falied!` }));
+    router.get(`/auth/error`, authController.error);
 
-    router.get(`/auth/google`, passport.authenticate(`google`, { scope: [`profile`, `email`], session: false }));
+    router.get(`/auth/google`, setClientData, passport.authenticate(`google`, { scope: [`profile`, `email`], session: false }));
 
     router.get(`/auth/google/callback`, passport.authenticate(`google`, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
   }
