@@ -17,6 +17,7 @@ export default class AuthService {
 
   public async authenticateWithPassword (email: string, password: string): Promise<AuthResponse> {
     const data: AuthResponse = {
+      success: true,
       token: `Must search user & create token for "${email}: ${password}" example`
     };
 
@@ -36,10 +37,17 @@ export default class AuthService {
       }
 
       const data: AuthResponse = {
+        success: true,
         token: `must search or create new user & create token for "${user.name} (${Number(user.id)})"`
       };
 
       return data;
     }
+  }
+
+  public error (): { success: boolean } {
+    return {
+      success: false
+    };
   }
 }
