@@ -25,10 +25,12 @@
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
       "@docs/*": ["docs/*"],
+      "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
       "@repository/*": ["repositories/*"],
       "@routes": ["routes/index"],
       "@routes/*": ["routes/*"],
+      "@utils/*": ["utils/*"],
     },
   },
   "include": [

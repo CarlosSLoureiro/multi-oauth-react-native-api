@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import Auth from '@auth';
 import Routes from '@routes';
 
+import cookieParser from 'cookie-parser';
 import Database from 'database';
 import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
@@ -22,6 +23,8 @@ export default class App {
     Routes.config(this.router);
 
     this.app.use(express.json());
+
+    this.app.use(cookieParser());
 
     this.app.use(this.router);
 

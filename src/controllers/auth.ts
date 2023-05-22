@@ -37,4 +37,16 @@ export default class AuthController {
       next(e);
     }
   }
+
+  public error (request: Request, response: Response, next: NextFunction): void {
+    try {
+      const authService = container.get<AuthService>(AuthService);
+
+      const data = authService.error();
+
+      ControllersUtils.redirectToDeepOrQueryLink(request, response, data);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
