@@ -23,7 +23,7 @@
   },
   "private": true,
   "scripts": {
-    "test": "tsc --noEmit && eslint . --ext .ts && eslint --ignore-path .gitignore . --fix --quiet",
+    "test": "tsc --noEmit && eslint --ignore-path .gitignore . --fix --quiet",
     "start": "nodemon"
   },
   "dependencies": {
