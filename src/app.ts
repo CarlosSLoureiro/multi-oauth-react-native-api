@@ -6,6 +6,7 @@ import Routes from '@routes';
 import errorsHandler from '@errors/handler';
 
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import Database from 'database';
 import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
@@ -23,6 +24,10 @@ export default class App {
     Auth.config();
 
     Routes.config(this.router);
+
+    this.app.use(cors({
+      origin: `*`
+    }));
 
     this.app.use(express.json());
 
