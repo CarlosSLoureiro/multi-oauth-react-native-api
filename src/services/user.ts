@@ -1,7 +1,10 @@
 import { inject, injectable } from 'inversify';
 
 import type User from '@models/user';
-import type UserInterface from '@models/user.interface';
+
+import type UserCreateRequest from '@requests/user.create';
+
+import ValidationError from '@errors/validation.error';
 
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
@@ -15,7 +18,11 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  public async create (user: Partial<UserInterface>): Promise<User> {
-    return await this.userRepository.create(user);
+  public async create (data: UserCreateRequest): Promise<User> {
+    const userWithSameEmail = await this.userRepository.findUserByEmail(data.email);
+    if (userWithSameEmail) {
+      throw new ValidationError(`The email address is already registed`, [`email`]);
+    }
+    return await this.userRepository.create(data);
   }
 }
