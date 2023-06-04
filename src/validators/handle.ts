@@ -23,7 +23,6 @@ export default (schema: Joi.ObjectSchema): ValidateInterface => {
           fields = fields.concat(detail.path);
         });
 
-        console.log(validationResult);
         response.status(400).json({ error: errorMessage, fields });
       } else {
         next();
