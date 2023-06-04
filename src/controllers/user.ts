@@ -6,8 +6,6 @@ import type UserInterface from '@models/user.interface';
 
 import UserService from '@services/user';
 
-import GenericError from '@errors/generic.error';
-
 import { type NextFunction, type Request, type Response } from 'express';
 
 @injectable()
