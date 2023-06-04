@@ -7,10 +7,26 @@ export default (error: any, request: Request, response: Response, next: NextFunc
   if (error instanceof GenericError) {
     response.status(error.statusCode).json({ error: error.message });
   } else if (error instanceof SequelizeError) {
-    console.log(error);
-    response.status(500).json({ error: error.message });
-  } else {
+    const errorMessage = `An error occurred during a database query`;
+
     // TODO: send request & error to sentry ...
-    response.status(500).json({ error: `Unhandled Server Error` });
+    console.log(errorMessage, error);
+
+    if (process.env.API_ENV === `development`) {
+      response.status(500).json({ error: errorMessage, message: error.message });
+    } else {
+      response.status(500).json({ error: errorMessage });
+    }
+  } else {
+    const errorMessage = `Unhandled Server Error`;
+
+    // TODO: send request & error to sentry ...
+    console.log(errorMessage, error);
+
+    if (process.env.API_ENV === `development`) {
+      response.status(500).json({ error: errorMessage, message: error.message });
+    } else {
+      response.status(500).json({ error: errorMessage });
+    }
   }
 };

@@ -3,8 +3,6 @@ import AuthRoutes from '@routes/auth';
 import SwaggerRoutes from '@routes/swagger';
 import UserRoutes from '@routes/user';
 
-import errorsHandler from '@errors/handler';
-
 import { type Router } from 'express';
 
 export default abstract class Routes {
@@ -21,7 +19,5 @@ export default abstract class Routes {
     }
     */
     SwaggerRoutes.config(router, swaggerPaths);
-
-    router.use(errorsHandler);
   }
 }
