@@ -2,8 +2,6 @@ import container from '@container';
 
 import { injectable } from 'inversify';
 
-import type UserInterface from '@models/user.interface';
-
 import UserService from '@services/user';
 
 import { type NextFunction, type Request, type Response } from 'express';

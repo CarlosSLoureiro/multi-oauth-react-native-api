@@ -1,3 +1,5 @@
+import type UserCreateRequest from "@requests/user.create";
+
 import handleValidator, { type ValidateInterface } from "./handle";
 import messages from "./messages";
 
@@ -5,7 +7,7 @@ import Joi from "joi";
 
 export default abstract class UserCreateValidator {
   public static validate (): ValidateInterface {
-    const schema = Joi.object({
+    const schema = Joi.object<UserCreateRequest>({
       name: Joi.string().label(`Name`).required(),
       email: Joi.string().label(`Email`).email().required(),
       password: Joi.string().label(`Password`).required(),

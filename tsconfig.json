@@ -29,6 +29,7 @@
       "@models/*": ["models/*"],
       "@errors/*": ["errors/*"],
       "@repository/*": ["repositories/*"],
+      "@requests/*": ["requests/*"],
       "@routes": ["routes/index"],
       "@routes/*": ["routes/*"],
       "@utils/*": ["utils/*"],
