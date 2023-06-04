@@ -15,7 +15,7 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  public async create (user: UserInterface): Promise<User> {
+  public async create (user: Partial<UserInterface>): Promise<User> {
     return await this.userRepository.create(user);
   }
 }
