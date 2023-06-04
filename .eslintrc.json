@@ -37,6 +37,7 @@
                 ["^@containers/?\\w", "^@models/?\\w"],
                 ["controller", "^@controllers/?\\w", "^@services/?\\w", "^@middlewares/?\\w"],
                 ["@auth", "@routes", "^@routes/?\\w"],
+                ["^@errors/?\\w"],
                 ["^@docs/?\\w"],
                 ["^@utils/?\\w"],
                 ["^\\u0000"],
