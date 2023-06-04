@@ -1,3 +1,5 @@
+import ValidationError from "@errors/validation.error";
+
 import { type NextFunction, type Request, type Response } from "express";
 import type Joi from "joi";
 
@@ -23,7 +25,7 @@ export default (schema: Joi.ObjectSchema): ValidateInterface => {
           fields = fields.concat(detail.path);
         });
 
-        response.status(400).json({ error: errorMessage, fields });
+        throw new ValidationError(errorMessage, fields);
       } else {
         next();
       }
