@@ -50,7 +50,7 @@ export default class AuthService {
     });
   }
 
-  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponseInterface | undefined> {
+  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponseInterface> {
     if (profile.emails && profile.emails.length > 0) {
       const email = profile.emails[0].value;
       let user = await this.userRepository.findUserByEmail(email);
@@ -72,7 +72,7 @@ export default class AuthService {
     }
   }
 
-  public async check (id: number): Promise<AuthResponseInterface | undefined> {
+  public async check (id: number): Promise<Omit<AuthResponseInterface, "token">> {
     const user = await this.userRepository.findUserById(id);
 
     if (!user) throw new GenericError(`User not found`);
@@ -81,8 +81,7 @@ export default class AuthService {
       id: user.id,
       name: user.name,
       email: user.email,
-      picture: user.picture,
-      token: this.getJWT(user)
+      picture: user.picture
     });
   }
 
