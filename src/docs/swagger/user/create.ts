@@ -10,7 +10,7 @@ export default {
       content: {
         'application/json': {
           schema: {
-            required: [`name`, `email`, `password`],
+            required: [`name`, `email`, `password`, `confirmPassword`],
             properties: {
               name: {
                 type: `string`,
@@ -26,6 +26,11 @@ export default {
                 type: `string`,
                 description: `The user password`,
                 example: `QHasj901AJKj`
+              },
+              confirmPassword: {
+                type: `string`,
+                description: `The user password confirmation`,
+                example: `QHasj901AJKj`
               }
             }
           }
@@ -38,22 +43,27 @@ export default {
         content: {
           'application/json': {
             schema: {
-              required: [`id`, `name`, `user`, `email`, `token`],
+              required: [`id`, `name`, `email`, `picture`, `token`],
               properties: {
                 id: {
                   type: `number`,
-                  description: `The user id`,
+                  description: `User id`,
                   example: `1`
                 },
                 name: {
                   type: `string`,
-                  description: `The full user name`,
+                  description: `User name`,
                   example: `Carlos Loureiro`
                 },
                 email: {
                   type: `string`,
-                  description: `The user email address`,
+                  description: `User email`,
                   example: `loureiro.s.carlos@gmail.com`
+                },
+                picture: {
+                  type: `string`,
+                  description: `User picture`,
+                  example: `https://i.imgur.com/xCvzudW.png`
                 },
                 token: {
                   type: `string`,
