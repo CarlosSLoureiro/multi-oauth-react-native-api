@@ -1,3 +1,11 @@
+import { type AuthenticatedUser } from '@middlewares/authenticated.types';
+
+declare global {
+  namespace Express {
+    interface User extends AuthenticatedUser {}
+  }
+}
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
