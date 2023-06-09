@@ -10,12 +10,27 @@ export default {
         content: {
           'application/json': {
             schema: {
-              required: [`token`],
+              required: [`id`, `name`, `email`, `picture`],
               properties: {
-                token: {
+                id: {
+                  type: `number`,
+                  description: `User id`,
+                  example: `1`
+                },
+                name: {
                   type: `string`,
-                  description: `User JWT Token that must be used`,
-                  example: `eyJ0eXAiOiJKV1QiLCJ...`
+                  description: `User name`,
+                  example: `Carlos Loureiro`
+                },
+                email: {
+                  type: `string`,
+                  description: `User email`,
+                  example: `loureiro.s.carlos@gmail.com`
+                },
+                picture: {
+                  type: `string`,
+                  description: `User picture`,
+                  example: `https://i.imgur.com/xCvzudW.png`
                 }
               }
             }
