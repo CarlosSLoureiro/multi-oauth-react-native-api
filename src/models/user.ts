@@ -25,4 +25,7 @@ export default class User extends Model<UserInterface, UserInterfaceModel> imple
 
   @Column(DataTypes.STRING)
   declare password?: string | null;
+
+  @Column(DataTypes.STRING)
+  declare picture?: string | null;
 }
