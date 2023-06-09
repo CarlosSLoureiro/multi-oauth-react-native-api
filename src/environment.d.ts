@@ -14,6 +14,9 @@ declare global {
       MYSQL_PASS: string;
       MYSQL_BASE: string;
 
+      JWT_SECRET: string;
+      BCRYPT_SALT: string;
+
       GOOGLE_CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;
     }
