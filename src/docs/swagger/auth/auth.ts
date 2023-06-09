@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export default {
   post: {
-    summary: `Do authentication.`,
+    summary: `Do authentication with user data.`,
     tags: [`Authentication`],
     requestBody: {
       description: `The payload required to make the authentication`,
