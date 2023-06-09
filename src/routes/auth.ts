@@ -19,7 +19,7 @@ export default abstract class AuthRoutes {
     let route: string;
     const authController = container.get<AuthController>(AuthController);
 
-    route = `/login`;
+    route = `/auth`;
     swaggerPaths[route] = swaggerDataAuth;
     router.post(route, RoutesUtils.getAsync(authController.authenticateWithPassword));
 
