@@ -18,6 +18,14 @@ export default class UserRepository implements UserRepositoryInterface {
     }
   }
 
+  public async findUserById (id: number): Promise<User | null> {
+    try {
+      return await User.findOne({ where: { id } });
+    } catch (error) {
+      throw new SequelizeError(error);
+    }
+  }
+
   public async findUserByEmail (email: string): Promise<User | null> {
     try {
       return await User.findOne({ where: { email } });
