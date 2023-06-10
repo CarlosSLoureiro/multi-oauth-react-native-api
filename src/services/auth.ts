@@ -8,9 +8,10 @@ import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import GenericError from '@errors/generic.error';
 
+import getHashedUserPassword from '@utils/user-password/get';
+
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { type Profile } from 'passport';
 
@@ -38,8 +39,7 @@ export default class AuthService {
 
     if (!user) throw new GenericError(`User not found`);
 
-    password = bcrypt.hashSync(password, process.env.API_SECRET);
-    if (user.password !== password) throw new GenericError(`Wrong password`);
+    if (user.password !== getHashedUserPassword(password)) throw new GenericError(`Wrong password`);
 
     return await Promise.resolve({
       id: user.id,

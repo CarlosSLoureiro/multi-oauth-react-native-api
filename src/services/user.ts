@@ -9,9 +9,10 @@ import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import ValidationError from '@errors/validation.error';
 
+import getHashedUserPassword from '@utils/user-password/get';
+
 import { type UserResponseInterface } from './user.types';
 
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 @injectable()
@@ -42,7 +43,7 @@ export default class UserService {
     const user = await this.userRepository.create({
       name: data.name,
       email: data.email,
-      password: bcrypt.hashSync(data.password, process.env.API_SECRET)
+      password: getHashedUserPassword(data.password)
     });
 
     return {
