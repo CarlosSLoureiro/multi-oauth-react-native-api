@@ -8,7 +8,7 @@ import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import GenericError from '@errors/generic.error';
 
-import { type AuthResponseInterface } from './auth.types';
+import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -33,7 +33,7 @@ export default class AuthService {
     return jwt.sign(authenticatedUser, process.env.JWT_SECRET, { expiresIn: `7d` });
   }
 
-  public async authenticateWithPassword (email: string, password: string): Promise<AuthResponseInterface> {
+  public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
     const user = await this.userRepository.findUserByEmail(email);
 
     if (!user) throw new GenericError(`User not found`);
@@ -63,16 +63,19 @@ export default class AuthService {
       }
 
       return await Promise.resolve({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        picture: user.picture,
-        token: this.getJWT(user)
+        action: `auth`,
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          picture: user.picture,
+          token: this.getJWT(user)
+        }
       });
     }
   }
 
-  public async check (id: number): Promise<Omit<AuthResponseInterface, "token">> {
+  public async check (id: number): Promise<Omit<UserDataResponseInterface, "token">> {
     const user = await this.userRepository.findUserById(id);
 
     if (!user) throw new GenericError(`User not found`);

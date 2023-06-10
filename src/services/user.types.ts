@@ -1,3 +1,3 @@
-import { type AuthResponseInterface } from "./auth.types";
+import { type UserDataResponseInterface } from "./auth.types";
 
-export type UserResponseInterface = AuthResponseInterface;
+export type UserResponseInterface = UserDataResponseInterface;
