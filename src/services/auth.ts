@@ -30,7 +30,7 @@ export default class AuthService {
       email: user.email
     };
 
-    return jwt.sign(authenticatedUser, process.env.JWT_SECRET, { expiresIn: `7d` });
+    return jwt.sign(authenticatedUser, process.env.API_SECRET, { expiresIn: `7d` });
   }
 
   public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
@@ -38,7 +38,7 @@ export default class AuthService {
 
     if (!user) throw new GenericError(`User not found`);
 
-    password = bcrypt.hashSync(password, process.env.BCRYPT_SALT);
+    password = bcrypt.hashSync(password, process.env.API_SECRET);
     if (user.password !== password) throw new GenericError(`Wrong password`);
 
     return await Promise.resolve({

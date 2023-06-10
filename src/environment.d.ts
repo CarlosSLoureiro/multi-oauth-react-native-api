@@ -14,16 +14,15 @@ declare global {
       API_NAME: string;
       API_VERSION: string;
       API_PORT: number;
+      API_SECRET: string;
 
       CLIENT_DOMAIN: string;
+      CLIENT_SALT: string;
 
       MYSQL_HOST: string;
       MYSQL_USER: string;
       MYSQL_PASS: string;
       MYSQL_BASE: string;
-
-      JWT_SECRET: string;
-      BCRYPT_SALT: string;
 
       GOOGLE_CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;

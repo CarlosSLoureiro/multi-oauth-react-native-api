@@ -30,7 +30,7 @@ export default class UserService {
       email: user.email
     };
 
-    return jwt.sign(authenticatedUser, process.env.JWT_SECRET, { expiresIn: `7d` });
+    return jwt.sign(authenticatedUser, process.env.API_SECRET, { expiresIn: `7d` });
   }
 
   public async create (data: UserCreateRequest): Promise<UserResponseInterface> {
@@ -42,7 +42,7 @@ export default class UserService {
     const user = await this.userRepository.create({
       name: data.name,
       email: data.email,
-      password: bcrypt.hashSync(data.password, process.env.BCRYPT_SALT)
+      password: bcrypt.hashSync(data.password, process.env.API_SECRET)
     });
 
     return {
