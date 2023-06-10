@@ -13,7 +13,7 @@ export default (error: any, request: Request, response: Response, next: NextFunc
     const errorMessage = `An error occurred during a database query`;
 
     // TODO: send request & error to sentry ...
-    console.log(errorMessage, error);
+    console.log(`${errorMessage}:`, error);
 
     if (process.env.API_ENV === `development`) {
       response.status(500).json({ error: errorMessage, message: error.message });
@@ -24,7 +24,7 @@ export default (error: any, request: Request, response: Response, next: NextFunc
     const errorMessage = `Unhandled Server Error`;
 
     // TODO: send request & error to sentry ...
-    console.log(errorMessage, error);
+    console.log(`${errorMessage}:`, error);
 
     if (process.env.API_ENV === `development`) {
       response.status(500).json({ error: errorMessage, message: error.message });
