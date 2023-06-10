@@ -78,6 +78,7 @@ jobs:
             echo API_NAME=${{ env.NAME }} >> .env
             echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
             echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
+            echo API_SECRET=${{ secrets.API_SECRET }} >> .env
 
             echo MYSQL_HOST=${{ secrets.MYSQL_HOST }} >> .env
             echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .env
@@ -85,6 +86,7 @@ jobs:
             echo MYSQL_BASE=${{ secrets.MYSQL_BASE }} >> .env
 
             echo CLIENT_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
+            echo CLIENT_SALT=${{ secrets.CLIENT_SALT }} >> .env
 
             echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
             echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
