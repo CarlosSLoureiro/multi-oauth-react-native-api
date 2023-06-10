@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NAME: API for Multi OAuth 2 with React Native
+      NAME: API for Multi OAuth2 with React Native
       DIR: /var/carlos-loureiro/apis/multi-oauth2-react-native-api
       IMAGE_NAME: multi-oauth2-react-native-api
       SERVICE_NAME: multi-oauth2-react-native-api-service
