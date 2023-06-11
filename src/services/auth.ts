@@ -7,9 +7,9 @@ import UserRepositoryInterface from '@repository/user.interface';
 import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import GenericError from '@errors/generic.error';
+import ValidationError from '@errors/validation.error';
 
 import matchPassword from '@utils/user-password/compare';
-import getHashedUserPassword from '@utils/user-password/get';
 
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
@@ -38,9 +38,9 @@ export default class AuthService {
   public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
     const user = await this.userRepository.findUserByEmail(email);
 
-    if (!user) throw new GenericError(`User not found`);
+    if (!user) throw new ValidationError(`User not found`, [`email`]);
 
-    if (!matchPassword(password, user.password)) throw new GenericError(`Wrong password`);
+    if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong password`, [`password`]);
 
     return await Promise.resolve({
       id: user.id,
