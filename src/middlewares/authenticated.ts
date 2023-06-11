@@ -15,7 +15,7 @@ export default class AuthenticatedMiddleware {
     }
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET) as AuthenticatedUser;
+      const decoded = jwt.verify(token, process.env.API_SECRET) as AuthenticatedUser;
 
       req.user = decoded;
 
