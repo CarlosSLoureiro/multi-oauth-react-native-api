@@ -77,7 +77,7 @@ jobs:
 
             echo API_NAME=${{ env.NAME }} >> .env
             echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
-            echo API_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
+            echo API_DOMAIN=${{ env.API_DOMAIN }} >> .env
             echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
             echo API_SECRET=${{ secrets.API_SECRET }} >> .env
 
