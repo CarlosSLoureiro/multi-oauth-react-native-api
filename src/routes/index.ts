@@ -1,6 +1,7 @@
 
 import AuthRoutes from '@routes/auth';
 import SwaggerRoutes from '@routes/swagger';
+import UserRoutes from '@routes/user';
 
 import { type Router } from 'express';
 
@@ -9,6 +10,7 @@ export default abstract class Routes {
     const swaggerPaths = {};
 
     AuthRoutes.config(router, swaggerPaths);
+    UserRoutes.config(router, swaggerPaths);
 
     /* Should not config swagger routes in production but it is for educational purposes...
 

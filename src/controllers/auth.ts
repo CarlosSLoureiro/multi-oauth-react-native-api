@@ -3,6 +3,7 @@ import container from '@container';
 import { injectable } from 'inversify';
 
 import AuthService from '@services/auth';
+import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import ControllersUtils from './utils';
 
@@ -33,6 +34,18 @@ export default class AuthController {
       const data = await authService.authenticateWithOAuthProfile(profile);
 
       ControllersUtils.redirectToDeepOrQueryLink(request, response, data);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async check (request: Request, response: Response, next: NextFunction): Promise<Response | undefined> {
+    try {
+      const authService = container.get<AuthService>(AuthService);
+
+      const authenticatedUser = request.user as AuthenticatedUser;
+
+      return response.json(await authService.check(authenticatedUser.id));
     } catch (e) {
       next(e);
     }

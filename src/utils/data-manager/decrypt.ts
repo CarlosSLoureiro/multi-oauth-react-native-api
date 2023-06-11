@@ -7,7 +7,7 @@ export default function decryptData (value: string): object | undefined {
 
   if (data) {
     try {
-      decrypted = JSON.parse(CryptoJS.AES.decrypt(decodeURIComponent(data), `CARLOS LOUREIRO`).toString(CryptoJS.enc.Utf8));
+      decrypted = JSON.parse(CryptoJS.AES.decrypt(decodeURIComponent(data), process.env.CLIENT_SALT).toString(CryptoJS.enc.Utf8));
     } catch (e) {
     }
   }

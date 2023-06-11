@@ -1,3 +1,11 @@
+import { type AuthenticatedUser } from '@middlewares/authenticated.types';
+
+declare global {
+  namespace Express {
+    interface User extends AuthenticatedUser {}
+  }
+}
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -6,8 +14,10 @@ declare global {
       API_NAME: string;
       API_VERSION: string;
       API_PORT: number;
+      API_SECRET: string;
 
       CLIENT_DOMAIN: string;
+      CLIENT_SALT: string;
 
       MYSQL_HOST: string;
       MYSQL_USER: string;
