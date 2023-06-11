@@ -38,7 +38,8 @@ jobs:
       REPLICAS: 3
       PORT_CONTAINER: 80
       PORT_PROXY: 3000 # Porta usada no nginx para o proxy
-      CLIENT_DOMAIN: https://web-multi-oauth2.carlosloureiro.xyz/
+      API_DOMAIN: https://api-multi-oauth2-react-native.carlosloureiro.xyz
+      CLIENT_DOMAIN: https://web-multi-oauth2.carlosloureiro.xyz
 
     steps:
       - name: Checkout code
@@ -76,6 +77,7 @@ jobs:
 
             echo API_NAME=${{ env.NAME }} >> .env
             echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
+            echo API_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
             echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
             echo API_SECRET=${{ secrets.API_SECRET }} >> .env
 

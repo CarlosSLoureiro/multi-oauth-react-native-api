@@ -16,7 +16,7 @@ export default abstract class GoogleAuth {
         {
           clientID: GOOGLE_CLIENT_ID,
           clientSecret: GOOGLE_CLIENT_SECRET,
-          callbackURL: `/auth/google/callback`,
+          callbackURL: `${process.env.API_DOMAIN}/auth/google/callback`,
           passReqToCallback: true
         },
         this.verify

@@ -13,6 +13,7 @@ declare global {
 
       API_NAME: string;
       API_VERSION: string;
+      API_DOMAIN: string;
       API_PORT: number;
       API_SECRET: string;
 
