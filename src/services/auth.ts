@@ -8,6 +8,7 @@ import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import GenericError from '@errors/generic.error';
 
+import matchPassword from '@utils/user-password/compare';
 import getHashedUserPassword from '@utils/user-password/get';
 
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
@@ -39,7 +40,7 @@ export default class AuthService {
 
     if (!user) throw new GenericError(`User not found`);
 
-    if (user.password !== getHashedUserPassword(password)) throw new GenericError(`Wrong password`);
+    if (!matchPassword(password, user.password)) throw new GenericError(`Wrong password`);
 
     return await Promise.resolve({
       id: user.id,
