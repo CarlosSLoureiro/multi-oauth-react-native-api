@@ -56,10 +56,17 @@ export default class AuthService {
       const email = profile.emails[0].value;
       let user = await this.userRepository.findUserByEmail(email);
 
+      let picture = null;
+
+      if (profile.photos && profile.photos.length > 0) {
+        picture = profile.photos[0].value;
+      }
+
       if (user === null) {
         user = await this.userRepository.create({
           name: profile.displayName,
-          email
+          email,
+          picture
         });
       }
 
