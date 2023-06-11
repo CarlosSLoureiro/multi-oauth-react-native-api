@@ -46,8 +46,7 @@ jobs:
 
       - name: Get latest tag
         id: latest_tag
-        run: |
-          echo "::set-output name=TAG::$(git describe --tags $(git rev-list --tags --max-count=1))"
+        run: echo "TAG=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
       - name: Pull lastest Release
         uses: appleboy/ssh-action@v0.1.8
@@ -99,7 +98,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd ${{ env.DIR }}
-            docker build -t ${{ env.IMAGE_NAME }} .
+            docker build -t ${{ env.IMAGE_NAME }}:${{ steps.latest_tag.outputs.TAG }} .
 
       - name: Deploy Application to Swarm
         uses: appleboy/ssh-action@v0.1.8
@@ -109,9 +108,9 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             if docker service ls --format '{{.Name}}' | grep -q "^${{ env.SERVICE_NAME }}$"; then
-              docker service update --force --quiet --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}
+              docker service update --force --quiet --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}:${{ steps.latest_tag.outputs.TAG }}
             else
-              docker service create --quiet --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}
+              docker service create --quiet --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}:${{ steps.latest_tag.outputs.TAG }}
             fi
 
       - name: Clear Exited Containers
