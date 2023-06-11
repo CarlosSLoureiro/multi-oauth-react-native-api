@@ -10,7 +10,11 @@ export default abstract class UserCreateValidator {
     const schema = Joi.object<UserCreateRequest>({
       name: Joi.string().label(`Name`).required(),
       email: Joi.string().label(`Email`).email().required(),
-      password: Joi.string().label(`Password`).required(),
+      password: Joi.string().label(`Password`)
+        .min(8)
+        .regex(/^(?=.*[A-Za-z])(?=.*\d)/)
+        .message(`The "Password" must contain at least one letter and one number`)
+        .required(),
       confirmPassword: Joi.string().label(`Confirm Password`).required()
         .valid(Joi.ref(`password`)).messages({
           'any.only': `The "Password" and "Confirm Password" fields must match`
