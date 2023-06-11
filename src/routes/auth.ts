@@ -12,6 +12,7 @@ import setClientData from '@utils/client-data/set';
 
 import RoutesUtils from './utils';
 
+import AuthValidator from '@validators/auth';
 import { type Router } from 'express';
 import passport from 'passport';
 
@@ -22,7 +23,7 @@ export default abstract class AuthRoutes {
 
     route = `/auth`;
     swaggerPaths[route] = swaggerDataAuth;
-    router.post(route, RoutesUtils.getAsync(authController.authenticateWithPassword));
+    router.post(route, AuthValidator.validate(), RoutesUtils.getAsync(authController.authenticateWithPassword));
 
     route = `/auth/check`;
     swaggerPaths[route] = swaggerDataAuthCheck;
