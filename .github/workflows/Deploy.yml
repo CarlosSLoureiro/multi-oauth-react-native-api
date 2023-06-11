@@ -113,7 +113,7 @@ jobs:
               docker service create --quiet --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}:${{ steps.latest_tag.outputs.TAG }}
             fi
 
-      - name: Clear Exited Containers
+      - name: Clear Exited Containers & Unused Images
         uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.SSH_SERVER }}
@@ -125,3 +125,5 @@ jobs:
             if [[ -n $container_ids ]]; then
               docker rm $container_ids
             fi
+
+            docker image prune --all --force
