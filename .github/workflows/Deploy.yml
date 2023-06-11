@@ -108,7 +108,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             if docker service ls --format '{{.Name}}' | grep -q "^${{ env.SERVICE_NAME }}$"; then
-              docker service update --force --quiet --image ${{ env.IMAGE_NAME }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}:${{ steps.latest_tag.outputs.TAG }}
+              docker service update --force --quiet --image ${{ env.IMAGE_NAME }}:${{ steps.latest_tag.outputs.TAG }} --replicas ${{ env.REPLICAS }} --publish-add ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.SERVICE_NAME }}
             else
               docker service create --quiet --name ${{ env.SERVICE_NAME }} --replicas ${{ env.REPLICAS }} -p ${{ env.PORT_PROXY }}:${{ env.PORT_CONTAINER }} ${{ env.IMAGE_NAME }}:${{ steps.latest_tag.outputs.TAG }}
             fi
