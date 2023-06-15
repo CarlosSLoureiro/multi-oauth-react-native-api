@@ -10,9 +10,17 @@ import type UserRepositoryInterface from './user.interface';
 @injectable()
 
 export default class UserRepository implements UserRepositoryInterface {
-  public async create (userData: UserInterface): Promise<User> {
+  public async create (userData: Omit<UserInterface, "id">): Promise<User> {
     try {
       return await User.create(userData);
+    } catch (error) {
+      throw new SequelizeError(error);
+    }
+  }
+
+  public async update (user: User, userData: Partial<Omit<UserInterface, "id">>): Promise<User> {
+    try {
+      return await user.update(userData);
     } catch (error) {
       throw new SequelizeError(error);
     }

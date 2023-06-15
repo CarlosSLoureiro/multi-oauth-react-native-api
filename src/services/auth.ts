@@ -68,6 +68,8 @@ export default class AuthService {
           email,
           picture
         });
+      } else if (user.picture === null) {
+        user = await this.userRepository.update(user, { picture });
       }
 
       return await Promise.resolve({
