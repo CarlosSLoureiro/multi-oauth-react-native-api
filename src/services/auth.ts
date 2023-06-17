@@ -40,7 +40,9 @@ export default class AuthService {
 
     if (!user) throw new ValidationError(`User not found`, [`email`]);
 
-    if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong password`, [`password`]);
+    if (user.password === null) throw new ValidationError(`The user does not have a registered password`, [`password`]);
+
+    if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong user password`, [`password`]);
 
     return await Promise.resolve({
       id: user.id,
