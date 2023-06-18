@@ -20,6 +20,7 @@ export default abstract class AuthRoutes {
   public static config (router: Router, swaggerPaths: object): void {
     let route: string;
     const authController = container.get<AuthController>(AuthController);
+    const athenticatedMiddleware = container.get<AuthenticatedMiddleware>(AuthenticatedMiddleware);
 
     route = `/auth`;
     swaggerPaths[route] = swaggerDataAuth;
@@ -27,7 +28,7 @@ export default abstract class AuthRoutes {
 
     route = `/auth/check`;
     swaggerPaths[route] = swaggerDataAuthCheck;
-    router.get(route, AuthenticatedMiddleware.handle, RoutesUtils.getAsync(authController.check));
+    router.get(route, athenticatedMiddleware.handle, RoutesUtils.getAsync(authController.check));
 
     route = `/auth/google`;
     swaggerPaths[route] = swaggerDataOAuth2.getAuthWith(`google`);
