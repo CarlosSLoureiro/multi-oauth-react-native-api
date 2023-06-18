@@ -2,8 +2,9 @@ import container from '@container';
 
 import { injectable } from 'inversify';
 
+import type User from '@models/user';
+
 import AuthService from '@services/auth';
-import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import ControllersUtils from './utils';
 
@@ -43,9 +44,9 @@ export default class AuthController {
     try {
       const authService = container.get<AuthService>(AuthService);
 
-      const authenticatedUser = request.user as AuthenticatedUser;
+      const user = request.user as User;
 
-      return response.json(await authService.check(authenticatedUser.id));
+      return response.json(await authService.check(user));
     } catch (e) {
       next(e);
     }

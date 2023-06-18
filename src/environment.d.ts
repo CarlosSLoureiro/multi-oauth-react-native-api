@@ -1,8 +1,8 @@
-import { type AuthenticatedUser } from '@middlewares/authenticated.types';
+import { type User as UserModel } from '@models/user';
 
 declare global {
   namespace Express {
-    interface User extends AuthenticatedUser {}
+    interface User extends UserModel {}
   }
 }
 
