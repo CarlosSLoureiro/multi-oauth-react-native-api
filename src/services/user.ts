@@ -49,7 +49,7 @@ export default class UserService {
     if (user.password === null) {
       if (data.currentPassword && data.currentPassword.length > 0) throw new ValidationError(`Users that don't have a registered password must leave the current password field empty`, [`currentPassword`]);
     } else {
-      if (!matchPassword(data.currentPassword, user.password)) throw new ValidationError(`The current password is does not match`, [`currentPassword`]);
+      if (!matchPassword(data.currentPassword, user.password)) throw new ValidationError(`The current password does not match`, [`currentPassword`]);
     }
 
     const userWithNewPassword = await this.userRepository.update(user, { password: data.newPassword });
