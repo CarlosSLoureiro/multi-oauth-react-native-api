@@ -13,6 +13,7 @@ import getToken from '@utils/user-password/token';
 
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
+import { StatusCodes } from 'http-status-codes';
 import { type Profile } from 'passport';
 
 @injectable()
@@ -79,9 +80,9 @@ export default class AuthService {
   public async verifyUserByIdAndPassword (id: number, password: string | null): Promise<User> {
     const user = await this.userRepository.findUserById(id);
 
-    if (!user) throw new GenericError(`User not found`);
+    if (!user) throw new GenericError(`User not found`, StatusCodes.UNAUTHORIZED);
 
-    if (user.password !== password) throw new GenericError(`Wrong user password`);
+    if (user.password !== password) throw new GenericError(`Wrong user password`, StatusCodes.UNAUTHORIZED);
 
     return user;
   }

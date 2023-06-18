@@ -30,14 +30,11 @@ export default class AuthenticatedMiddleware {
         request.user = user;
         next();
       }).catch(e => {
-        console.log(`check error > `, e);
-        throw e;
+        next(e);
       });
     } catch (err) {
       if (err instanceof TokenExpiredError) {
         throw new GenericError(`Expired auth token`, StatusCodes.UNAUTHORIZED);
-      } else if (err instanceof GenericError) {
-        throw new GenericError(err.message, StatusCodes.UNAUTHORIZED);
       } else {
         throw new GenericError(`Invalid auth token`, StatusCodes.UNAUTHORIZED);
       }
