@@ -87,9 +87,7 @@ export default class AuthService {
     return user;
   }
 
-  public async check (id: number, password: string | null): Promise<Omit<UserDataResponseInterface, "token">> {
-    const user = await this.verifyUserByIdAndPassword(id, password);
-
+  public async check (user: User): Promise<Omit<UserDataResponseInterface, "token">> {
     return await Promise.resolve({
       id: user.id,
       name: user.name,

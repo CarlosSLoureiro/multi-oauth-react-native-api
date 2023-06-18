@@ -46,7 +46,7 @@ export default class AuthController {
 
       const user = request.user as User;
 
-      return response.json(await authService.check(user.id, user.password));
+      return response.json(await authService.check(user));
     } catch (e) {
       next(e);
     }
