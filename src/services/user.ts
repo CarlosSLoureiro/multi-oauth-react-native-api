@@ -52,7 +52,7 @@ export default class UserService {
       if (!matchPassword(data.currentPassword, user.password)) throw new ValidationError(`The current password does not match`, [`currentPassword`]);
     }
 
-    const userWithNewPassword = await this.userRepository.update(user, { password: data.newPassword });
+    const userWithNewPassword = await this.userRepository.update(user, { password: getHashedUserPassword(data.newPassword) });
 
     return {
       token: getToken(userWithNewPassword)
