@@ -1,19 +1,15 @@
 import { inject, injectable } from 'inversify';
 
-import type User from '@models/user';
-
 import type UserCreateRequest from '@requests/user.create';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
-import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import ValidationError from '@errors/validation.error';
 
 import getHashedUserPassword from '@utils/user-password/get';
+import getToken from '@utils/user-password/token';
 
 import { type UserResponseInterface } from './user.types';
-
-import jwt from 'jsonwebtoken';
 
 @injectable()
 
@@ -22,16 +18,6 @@ export default class UserService {
 
   constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface) {
     this.userRepository = userRepository;
-  }
-
-  private getJWT (user: User): string {
-    const authenticatedUser: AuthenticatedUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email
-    };
-
-    return jwt.sign(authenticatedUser, process.env.API_SECRET, { expiresIn: `7d` });
   }
 
   public async create (data: UserCreateRequest): Promise<UserResponseInterface> {
@@ -51,7 +37,7 @@ export default class UserService {
       name: user.name,
       email: user.email,
       picture: null,
-      token: this.getJWT(user)
+      token: getToken(user)
     };
   }
 }

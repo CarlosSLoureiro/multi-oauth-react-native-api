@@ -4,16 +4,15 @@ import type User from '@models/user';
 
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
-import { type AuthenticatedUser } from '@middlewares/authenticated.types';
 
 import GenericError from '@errors/generic.error';
 import ValidationError from '@errors/validation.error';
 
 import matchPassword from '@utils/user-password/compare';
+import getToken from '@utils/user-password/token';
 
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
-import jwt from 'jsonwebtoken';
 import { type Profile } from 'passport';
 
 @injectable()
@@ -23,16 +22,6 @@ export default class AuthService {
 
   constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface) {
     this.userRepository = userRepository;
-  }
-
-  private getJWT (user: User): string {
-    const authenticatedUser: AuthenticatedUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email
-    };
-
-    return jwt.sign(authenticatedUser, process.env.API_SECRET, { expiresIn: `7d` });
   }
 
   public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
@@ -49,7 +38,7 @@ export default class AuthService {
       name: user.name,
       email: user.email,
       picture: user.picture,
-      token: this.getJWT(user)
+      token: getToken(user)
     });
   }
 
@@ -81,16 +70,24 @@ export default class AuthService {
           name: user.name,
           email: user.email,
           picture: user.picture,
-          token: this.getJWT(user)
+          token: getToken(user)
         }
       });
     }
   }
 
-  public async check (id: number): Promise<Omit<UserDataResponseInterface, "token">> {
+  public async verifyUserByIdAndPassword (id: number, password: string | null): Promise<User> {
     const user = await this.userRepository.findUserById(id);
 
     if (!user) throw new GenericError(`User not found`);
+
+    if (user.password !== password) throw new GenericError(`Wrong user password`);
+
+    return user;
+  }
+
+  public async check (id: number, password: string | null): Promise<Omit<UserDataResponseInterface, "token">> {
+    const user = await this.verifyUserByIdAndPassword(id, password);
 
     return await Promise.resolve({
       id: user.id,
