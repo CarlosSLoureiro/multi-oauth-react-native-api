@@ -1,3 +1,4 @@
+import Logins from './logins';
 import type UserInterface from './user.interface';
 
 import { DataTypes, type Optional } from 'sequelize';
@@ -28,4 +29,8 @@ export default class User extends Model<UserInterface, UserInterfaceModel> imple
 
   @Column(DataTypes.STRING)
   declare picture?: string | null;
+
+  static relations (): void {
+    User.hasMany(Logins, { foreignKey: `user_id` });
+  }
 }

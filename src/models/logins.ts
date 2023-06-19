@@ -30,4 +30,8 @@ export default class Logins extends Model<LoginsInterface, LoginsInterfaceModel>
     defaultValue: DataTypes.NOW
   })
   declare date: Date;
+
+  static relations (): void {
+    Logins.belongsTo(User, { foreignKey: `user_id` });
+  }
 }
