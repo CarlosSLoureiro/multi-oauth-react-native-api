@@ -25,7 +25,7 @@ export default class Database {
     }
 
     try {
-      await this.sequelize.sync({ force: true });
+      await this.sequelize.sync({ force: false });
       console.log(`\x1b[32m`, `Successfully connected to the Database!`, `\x1b[0m`);
     } catch (e) {
       console.log(e);
