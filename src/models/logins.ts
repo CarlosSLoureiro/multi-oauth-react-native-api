@@ -22,9 +22,6 @@ export default class Logins extends Model<LoginsInterface, LoginsInterfaceModel>
   @Column(DataTypes.ENUM(...Object.values(LoginMethods)))
   declare method: LoginMethods;
 
-  @Column(DataTypes.STRING(128))
-  declare address: string;
-
   @Column({
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW

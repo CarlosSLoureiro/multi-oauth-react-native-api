@@ -31,16 +31,15 @@ export default class AuthService {
     this.loginsRepository = loginsRepository;
   }
 
-  private async createLoginEventLog (user: User, method: LoginMethods, address: string): Promise<Logins> {
+  private async createLoginEventLog (user: User, method: LoginMethods): Promise<Logins> {
     return await this.loginsRepository.create({
       user_id: user.id,
       method,
-      address,
       date: new Date()
     });
   }
 
-  public async authenticateWithPassword (email: string, password: string, address: string): Promise<UserDataResponseInterface> {
+  public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
     const user = await this.userRepository.findUserByEmail(email);
 
     if (!user) throw new ValidationError(`User not found`, [`email`]);
@@ -49,7 +48,7 @@ export default class AuthService {
 
     if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong user password`, [`password`]);
 
-    await this.createLoginEventLog(user, LoginMethods.Password, address);
+    await this.createLoginEventLog(user, LoginMethods.Password);
 
     return {
       id: user.id,

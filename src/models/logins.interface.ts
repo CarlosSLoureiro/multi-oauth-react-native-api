@@ -8,6 +8,5 @@ export default interface LoginsInterface {
   id: number;
   user_id: number;
   method: LoginMethods;
-  address: string;
   date: Date;
 }
