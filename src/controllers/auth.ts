@@ -20,7 +20,7 @@ export default class AuthController {
 
       const { email, password } = request.body;
 
-      return response.json(await authService.authenticateWithPassword(email, password));
+      return response.json(await authService.authenticateWithPassword(email, password, request.ip));
     } catch (e) {
       next(e);
     }

@@ -1,7 +1,11 @@
 import { inject, injectable } from 'inversify';
 
+import type Logins from '@models/logins';
+import { LoginMethods } from '@models/logins.interface';
 import type User from '@models/user';
 
+import LoginsRepository from '@repository/logins';
+import type LoginsRepositoryInterface from '@repository/logins.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
@@ -20,12 +24,23 @@ import { type Profile } from 'passport';
 
 export default class AuthService {
   private readonly userRepository: UserRepositoryInterface;
+  private readonly loginsRepository: LoginsRepositoryInterface;
 
-  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface) {
+  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(LoginsRepository) loginsRepository?: LoginsRepository) {
     this.userRepository = userRepository;
+    this.loginsRepository = loginsRepository;
   }
 
-  public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
+  private async createLoginEventLog (user: User, method: LoginMethods, address: string): Promise<Logins> {
+    return await this.loginsRepository.create({
+      user_id: user.id,
+      method,
+      address,
+      date: new Date()
+    });
+  }
+
+  public async authenticateWithPassword (email: string, password: string, address: string): Promise<UserDataResponseInterface> {
     const user = await this.userRepository.findUserByEmail(email);
 
     if (!user) throw new ValidationError(`User not found`, [`email`]);
@@ -34,13 +49,15 @@ export default class AuthService {
 
     if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong user password`, [`password`]);
 
-    return await Promise.resolve({
+    await this.createLoginEventLog(user, LoginMethods.Password, address);
+
+    return {
       id: user.id,
       name: user.name,
       email: user.email,
       picture: user.picture,
       token: getToken(user)
-    });
+    };
   }
 
   public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponseInterface> {
