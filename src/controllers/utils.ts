@@ -17,16 +17,22 @@ export default abstract class ControllersUtils {
 
     const clientData = getClientData(request);
 
-    if (clientData?.isDevelopment) {
-      if (ControllersUtils.wasRequestedFromMobile(request)) {
+    if (ControllersUtils.wasRequestedFromMobile(request)) {
+      if (clientData?.isDevelopment) {
         url = `exp://${clientData.debuggerHost}/--/`;
       } else {
-        url = request.headers.referer;
+        url = `myapptest://`;
       }
-    } else if (ControllersUtils.wasRequestedFromMobile(request)) {
-      url = `myapptest://`;
     } else {
-      url = CLIENT_DOMAIN;
+      if (clientData?.isDevelopment) {
+        url = request.headers.referer;
+        if (url.endsWith(`/`)) {
+          url = url.slice(0, -1);
+        }
+        url = `${url}${clientData.webScreenRoute}`;
+      } else {
+        url = `${CLIENT_DOMAIN}${clientData.webScreenRoute}`;
+      }
     }
 
     url = `${url}?data=${encryptData(data)}`;
