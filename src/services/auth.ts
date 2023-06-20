@@ -80,7 +80,9 @@ export default class AuthService {
         user = await this.userRepository.update(user, { picture });
       }
 
-      return await Promise.resolve({
+      await this.createLoginEventLog(user, LoginMethods.Google);
+
+      return {
         action: `auth`,
         data: {
           id: user.id,
@@ -89,7 +91,7 @@ export default class AuthService {
           picture: user.picture,
           token: getToken(user)
         }
-      });
+      };
     }
   }
 
