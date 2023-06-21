@@ -1,4 +1,4 @@
-import Logins from './logins';
+import Activity from './activity';
 import type UserInterface from './user.interface';
 
 import { DataTypes, type Optional } from 'sequelize';
@@ -30,6 +30,6 @@ export default class User extends Model<UserInterface, UserInterfaceModel> imple
   @Column(DataTypes.STRING)
   declare picture?: string | null;
 
-  @HasMany(() => Logins, `user_id`)
-  declare logins?: Array<Logins>;
+  @HasMany(() => Activity, `user_id`)
+  declare activities?: Array<Activity>;
 }

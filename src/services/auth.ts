@@ -1,11 +1,10 @@
 import { inject, injectable } from 'inversify';
 
-import type Logins from '@models/logins';
-import { LoginMethods } from '@models/logins.interface';
+import type Activity from '@models/activity';
 import type User from '@models/user';
 
-import LoginsRepository from '@repository/logins';
-import LoginsRepositoryInterface from '@repository/logins.interface';
+import ActivityRepository from '@repository/activity';
+import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
@@ -15,6 +14,7 @@ import ValidationError from '@errors/validation.error';
 import matchPassword from '@utils/user-password/compare';
 import getToken from '@utils/user-password/token';
 
+import { Activities } from './activity.types';
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
 import { StatusCodes } from 'http-status-codes';
@@ -24,17 +24,17 @@ import { type Profile } from 'passport';
 
 export default class AuthService {
   private readonly userRepository: UserRepositoryInterface;
-  private readonly loginsRepository: LoginsRepositoryInterface;
+  private readonly activityRepository: ActivityRepositoryInterface;
 
-  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(LoginsRepository) loginsRepository?: LoginsRepositoryInterface) {
+  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(ActivityRepository) activityRepository?: ActivityRepositoryInterface) {
     this.userRepository = userRepository;
-    this.loginsRepository = loginsRepository;
+    this.activityRepository = activityRepository;
   }
 
-  private async createLoginEventLog (user: User, method: LoginMethods): Promise<Logins> {
-    return await this.loginsRepository.create({
+  private async createLoginActivity (user: User, message: string): Promise<Activity> {
+    return await this.activityRepository.create({
       user_id: user.id,
-      method,
+      message,
       date: new Date()
     });
   }
@@ -48,7 +48,7 @@ export default class AuthService {
 
     if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong user password`, [`password`]);
 
-    await this.createLoginEventLog(user, LoginMethods.Password);
+    await this.createLoginActivity(user, Activities.LOGIN_WITH_PASSWORD);
 
     return {
       id: user.id,
@@ -80,7 +80,7 @@ export default class AuthService {
         user = await this.userRepository.update(user, { picture });
       }
 
-      await this.createLoginEventLog(user, LoginMethods.Google);
+      await this.createLoginActivity(user, Activities.LOGIN_WITH_GOOGLE);
 
       return {
         action: `auth`,

@@ -1,26 +1,25 @@
 import User from '@models/user';
 
-import type LoginsInterface from './logins.interface';
-import { LoginMethods } from './logins.interface';
+import type ActivityInterface from './activity.interface';
 
 import { DataTypes, type Optional } from 'sequelize';
 import { BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
 
-type LoginsInterfaceModel = Optional<LoginsInterface, 'id'>;
+type ActivityInterfaceModel = Optional<ActivityInterface, 'id'>;
 
 @Table({
-  tableName: `logins`,
+  tableName: `activities`,
   freezeTableName: true,
   timestamps: false
 })
 
-export default class Logins extends Model<LoginsInterface, LoginsInterfaceModel> implements LoginsInterfaceModel {
+export default class Activity extends Model<ActivityInterface, ActivityInterfaceModel> implements ActivityInterfaceModel {
   @ForeignKey(() => User)
   @Column(DataTypes.INTEGER)
   declare user_id: number;
 
-  @Column(DataTypes.ENUM(...Object.values(LoginMethods)))
-  declare method: LoginMethods;
+  @Column(DataTypes.STRING)
+  declare message: string;
 
   @Column({
     type: DataTypes.DATE,

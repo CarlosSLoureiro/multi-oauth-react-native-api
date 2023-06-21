@@ -1,6 +1,6 @@
 
+import ActivityRoutes from '@routes/activity';
 import AuthRoutes from '@routes/auth';
-import LoginsRoutes from '@routes/logins';
 import SwaggerRoutes from '@routes/swagger';
 import UserRoutes from '@routes/user';
 
@@ -11,8 +11,8 @@ export default abstract class Routes {
     const swaggerPaths = {};
 
     AuthRoutes.config(router, swaggerPaths);
-    LoginsRoutes.config(router, swaggerPaths);
     UserRoutes.config(router, swaggerPaths);
+    ActivityRoutes.config(router, swaggerPaths);
 
     /* Should not config swagger routes in production but it is for educational purposes...
 
