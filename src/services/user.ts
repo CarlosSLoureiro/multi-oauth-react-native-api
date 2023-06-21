@@ -4,6 +4,8 @@ import type User from '@models/user';
 
 import type UserChangePasswordRequest from '@requests/user.change-password';
 import type UserCreateRequest from '@requests/user.create';
+import ActivityRepository from '@repository/activity';
+import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
@@ -13,15 +15,18 @@ import matchPassword from '@utils/user-password/compare';
 import getHashedUserPassword from '@utils/user-password/get';
 import getToken from '@utils/user-password/token';
 
+import { Activities } from './activity.types';
 import { type UserChangePasswordResponseInterface, type UserResponseInterface } from './user.types';
 
 @injectable()
 
 export default class UserService {
   private readonly userRepository: UserRepositoryInterface;
+  private readonly activityRepository: ActivityRepositoryInterface;
 
-  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface) {
+  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(ActivityRepository) activityRepository?: ActivityRepositoryInterface) {
     this.userRepository = userRepository;
+    this.activityRepository = activityRepository;
   }
 
   public async create (data: UserCreateRequest): Promise<UserResponseInterface> {
@@ -53,6 +58,8 @@ export default class UserService {
     }
 
     const userWithNewPassword = await this.userRepository.update(user, { password: getHashedUserPassword(data.newPassword) });
+
+    await this.activityRepository.create(userWithNewPassword, Activities.NEW_PASSWORD);
 
     return {
       token: getToken(userWithNewPassword)
