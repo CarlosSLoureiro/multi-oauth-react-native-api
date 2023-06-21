@@ -5,7 +5,7 @@ import { LoginMethods } from '@models/logins.interface';
 import type User from '@models/user';
 
 import LoginsRepository from '@repository/logins';
-import type LoginsRepositoryInterface from '@repository/logins.interface';
+import LoginsRepositoryInterface from '@repository/logins.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
@@ -26,7 +26,7 @@ export default class AuthService {
   private readonly userRepository: UserRepositoryInterface;
   private readonly loginsRepository: LoginsRepositoryInterface;
 
-  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(LoginsRepository) loginsRepository?: LoginsRepository) {
+  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(LoginsRepository) loginsRepository?: LoginsRepositoryInterface) {
     this.userRepository = userRepository;
     this.loginsRepository = loginsRepository;
   }
