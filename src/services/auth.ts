@@ -1,7 +1,10 @@
 import { inject, injectable } from 'inversify';
 
+import type Activity from '@models/activity';
 import type User from '@models/user';
 
+import ActivityRepository from '@repository/activity';
+import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
@@ -11,6 +14,7 @@ import ValidationError from '@errors/validation.error';
 import matchPassword from '@utils/user-password/compare';
 import getToken from '@utils/user-password/token';
 
+import { Activities } from './activity.types';
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
 import { StatusCodes } from 'http-status-codes';
@@ -20,9 +24,11 @@ import { type Profile } from 'passport';
 
 export default class AuthService {
   private readonly userRepository: UserRepositoryInterface;
+  private readonly activityRepository: ActivityRepositoryInterface;
 
-  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface) {
+  constructor (@inject(UserRepository) userRepository?: UserRepositoryInterface, @inject(ActivityRepository) activityRepository?: ActivityRepositoryInterface) {
     this.userRepository = userRepository;
+    this.activityRepository = activityRepository;
   }
 
   public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
@@ -34,13 +40,15 @@ export default class AuthService {
 
     if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong user password`, [`password`]);
 
-    return await Promise.resolve({
+    await this.activityRepository.create(user, Activities.LOGIN_WITH_PASSWORD);
+
+    return {
       id: user.id,
       name: user.name,
       email: user.email,
       picture: user.picture,
       token: getToken(user)
-    });
+    };
   }
 
   public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponseInterface> {
@@ -64,7 +72,9 @@ export default class AuthService {
         user = await this.userRepository.update(user, { picture });
       }
 
-      return await Promise.resolve({
+      await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
+
+      return {
         action: `auth`,
         data: {
           id: user.id,
@@ -73,7 +83,7 @@ export default class AuthService {
           picture: user.picture,
           token: getToken(user)
         }
-      });
+      };
     }
   }
 

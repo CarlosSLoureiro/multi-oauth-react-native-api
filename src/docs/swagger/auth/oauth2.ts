@@ -7,6 +7,7 @@ const getAuthWith = (thirdParty: string): object => {
     get: {
       summary: `${capitalizedThirdParty} authentication route.`,
       tags: [`Authentication`],
+      security: [],
       parameters: [
         {
           name: `data`,
@@ -37,6 +38,7 @@ const getCallback = (thirdParty: string): object => {
     get: {
       summary: `Callback route from ${thirdParty} authentication.`,
       tags: [`Authentication`],
+      security: [],
       responses: {
         [StatusCodes.TEMPORARY_REDIRECT]: {
           description: `The ${thirdParty} authorization form will bring the user data to this route after confirmation. This route will redirect the user to client with encrypted data query as user authentication data (same as auth route: user id, name, email, picture and authentication token)`,

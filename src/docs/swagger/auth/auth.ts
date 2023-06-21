@@ -4,6 +4,7 @@ export default {
   post: {
     summary: `Do authentication with user password.`,
     tags: [`Authentication`],
+    security: [],
     requestBody: {
       description: `The payload required to make the authentication`,
       required: true,

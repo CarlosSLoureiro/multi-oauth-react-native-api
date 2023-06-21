@@ -9,7 +9,7 @@ export default function getToken (user: User): string {
     id: user.id,
     name: user.name,
     email: user.email,
-    password: user.password
+    password: (user.password ? user.password : null)
   };
 
   return jwt.sign(authenticatedUser, process.env.API_SECRET, { expiresIn: `7d` });

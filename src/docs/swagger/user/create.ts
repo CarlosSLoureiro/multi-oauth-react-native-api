@@ -4,6 +4,7 @@ export default {
   post: {
     summary: `Create new user.`,
     tags: [`User`],
+    security: [],
     requestBody: {
       description: `The payload required to create a new user`,
       required: true,

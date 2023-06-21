@@ -1,4 +1,5 @@
 
+import ActivityRoutes from '@routes/activity';
 import AuthRoutes from '@routes/auth';
 import SwaggerRoutes from '@routes/swagger';
 import UserRoutes from '@routes/user';
@@ -11,6 +12,7 @@ export default abstract class Routes {
 
     AuthRoutes.config(router, swaggerPaths);
     UserRoutes.config(router, swaggerPaths);
+    ActivityRoutes.config(router, swaggerPaths);
 
     /* Should not config swagger routes in production but it is for educational purposes...
 

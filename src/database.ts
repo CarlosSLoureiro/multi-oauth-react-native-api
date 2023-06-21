@@ -1,3 +1,4 @@
+import Activity from "@models/activity";
 import User from "@models/user";
 
 import { Sequelize } from 'sequelize-typescript';
@@ -12,7 +13,7 @@ export default class Database {
       host: MYSQL_HOST,
       logging: false,
       dialect: `mysql`,
-      models: [User]
+      models: [User, Activity]
     });
 
     try {
