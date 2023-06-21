@@ -1,7 +1,7 @@
 import type Activity from "@models/activity";
 import type User from "@models/user";
 
-export type UserActivityResponse = { user: Pick<User, 'name' | 'picture'> } & Pick<Activity, "message" | "date">;
+export type UserActivityResponse = { user: Pick<User, 'name' | 'picture'> } & Pick<Activity, "id" | "message" | "date">;
 
 export enum Activities {
   LOGIN_WITH_PASSWORD = `Has logged in using his own password`,
