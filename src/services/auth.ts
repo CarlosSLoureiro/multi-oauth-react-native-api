@@ -8,6 +8,8 @@ import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
+import { type OAuth2Profile } from '@auth';
+
 import GenericError from '@errors/generic.error';
 import ValidationError from '@errors/validation.error';
 
@@ -18,7 +20,6 @@ import { Activities } from './activity.types';
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
 import { StatusCodes } from 'http-status-codes';
-import { type Profile } from 'passport';
 
 @injectable()
 
@@ -51,7 +52,7 @@ export default class AuthService {
     };
   }
 
-  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponseInterface> {
+  public async authenticateWithOAuthProfile (profile: OAuth2Profile): Promise<AuthResponseInterface> {
     if (profile.emails && profile.emails.length > 0) {
       const email = profile.emails[0].value;
       let user = await this.userRepository.findUserByEmail(email);
