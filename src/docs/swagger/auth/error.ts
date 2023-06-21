@@ -4,6 +4,7 @@ export default {
   get: {
     summary: `OAuth2 error route.`,
     tags: [`Authentication`],
+    security: [],
     responses: {
       [StatusCodes.TEMPORARY_REDIRECT]: {
         description: `In case of some OAuth2 way throws error, it will route to this route that will redirect the user to client with encrypted data query as error.`,
