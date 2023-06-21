@@ -9,20 +9,12 @@ export default class Database {
   public async config (): Promise<void> {
     const { MYSQL_BASE, MYSQL_USER, MYSQL_PASS, MYSQL_HOST } = process.env;
 
-    const models = [User, Logins];
-
     this.sequelize = new Sequelize(MYSQL_BASE, MYSQL_USER, MYSQL_PASS, {
       host: MYSQL_HOST,
       logging: false,
       dialect: `mysql`,
-      models
+      models: [User, Logins]
     });
-
-    for (const model of models) {
-      if (`relations` in model && typeof model.relations === `function`) {
-        model.relations();
-      }
-    }
 
     try {
       await this.sequelize.sync({ force: false });

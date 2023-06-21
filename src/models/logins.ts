@@ -4,7 +4,7 @@ import type LoginsInterface from './logins.interface';
 import { LoginMethods } from './logins.interface';
 
 import { DataTypes, type Optional } from 'sequelize';
-import { Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
 
 type LoginsInterfaceModel = Optional<LoginsInterface, 'id'>;
 
@@ -28,7 +28,6 @@ export default class Logins extends Model<LoginsInterface, LoginsInterfaceModel>
   })
   declare date: Date;
 
-  static relations (): void {
-    Logins.belongsTo(User, { foreignKey: `user_id` });
-  }
+  @BelongsTo(() => User, `user_id`)
+  declare user?: User;
 }
