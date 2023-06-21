@@ -12,8 +12,9 @@ export default class ActivityController {
   public async list (request: Request, response: Response, next: NextFunction): Promise<object> {
     try {
       const activityService = container.get<ActivityService>(ActivityService);
+      const page = parseInt(request.params.page) ?? 0;
 
-      const data = await activityService.list(0);
+      const data = await activityService.list(page);
 
       return response.json(data);
     } catch (e) {

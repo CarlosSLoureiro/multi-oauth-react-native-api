@@ -13,6 +13,6 @@ export default abstract class ActivityRoutes {
     const athenticatedMiddleware = container.get<AuthenticatedMiddleware>(AuthenticatedMiddleware);
 
     // router.get(`/activities/list`, athenticatedMiddleware.handle, RoutesUtils.getAsync(activityController.list));
-    router.get(`/activities/list`, RoutesUtils.getAsync(activityController.list));
+    router.get(`/activities/list/:page`, RoutesUtils.getAsync(activityController.list));
   }
 }
