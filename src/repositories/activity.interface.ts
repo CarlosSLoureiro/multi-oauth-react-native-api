@@ -1,7 +1,7 @@
 import type Activity from '@models/activity';
-import type ActivityInterface from '@models/activity.interface';
+import type User from '@models/user';
 
 export default interface ActivityRepositoryInterface {
-  create: (activityData: Omit<ActivityInterface, "id">) => Promise<Activity>;
+  create: (user: User, message: string) => Promise<Activity>;
   findManyByPage: (list: number) => Promise<Array<Activity>>;
 }

@@ -31,14 +31,6 @@ export default class AuthService {
     this.activityRepository = activityRepository;
   }
 
-  private async createLoginActivity (user: User, message: string): Promise<Activity> {
-    return await this.activityRepository.create({
-      user_id: user.id,
-      message,
-      date: new Date()
-    });
-  }
-
   public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
     const user = await this.userRepository.findUserByEmail(email);
 
@@ -48,7 +40,7 @@ export default class AuthService {
 
     if (!matchPassword(password, user.password)) throw new ValidationError(`Wrong user password`, [`password`]);
 
-    await this.createLoginActivity(user, Activities.LOGIN_WITH_PASSWORD);
+    await this.activityRepository.create(user, Activities.LOGIN_WITH_PASSWORD);
 
     return {
       id: user.id,
@@ -80,7 +72,7 @@ export default class AuthService {
         user = await this.userRepository.update(user, { picture });
       }
 
-      await this.createLoginActivity(user, Activities.LOGIN_WITH_GOOGLE);
+      await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
 
       return {
         action: `auth`,

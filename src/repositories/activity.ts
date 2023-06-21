@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 
 import Activity from '@models/activity';
-import type ActivityInterface from '@models/activity.interface';
 import User from '@models/user';
 
 import SequelizeError from '@errors/sequelize.error';
@@ -11,9 +10,13 @@ import type ActivityRepositoryInterface from './activity.interface';
 @injectable()
 
 export default class ActivityRepository implements ActivityRepositoryInterface {
-  public async create (activityData: Omit<ActivityInterface, "id">): Promise<Activity> {
+  public async create (user: User, message: string): Promise<Activity> {
     try {
-      return await Activity.create(activityData);
+      return await Activity.create({
+        message,
+        user_id: user.id,
+        date: new Date()
+      });
     } catch (error) {
       throw new SequelizeError(error);
     }
