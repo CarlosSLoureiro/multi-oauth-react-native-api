@@ -68,6 +68,7 @@ export default class AuthService {
           email,
           picture
         });
+        await this.activityRepository.create(user, Activities.NEW_ACCOUNT);
       } else if (user.picture === null) {
         user = await this.userRepository.update(user, { picture });
       }

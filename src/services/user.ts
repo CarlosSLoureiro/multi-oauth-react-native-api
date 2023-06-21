@@ -41,6 +41,14 @@ export default class UserService {
       password: getHashedUserPassword(data.password)
     });
 
+    await this.activityRepository.create(user, Activities.NEW_ACCOUNT);
+    await this.activityRepository.create(user, Activities.LOGIN_WITH_PASSWORD);
+    /*
+      Why create login with password activity in create service?
+      The client will use the response token to make the login.
+      Therefore, after sign up success response, will not be necessary go to the login screen.
+    */
+
     return {
       id: user.id,
       name: user.name,
