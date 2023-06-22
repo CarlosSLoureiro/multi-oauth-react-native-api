@@ -1,14 +1,17 @@
 
+import FacebookAuth from './facebook';
 import GoogleAuth from './google';
 
 import { type Profile } from 'passport';
 
 export interface OAuth2Profile extends Profile {
-  picture: string;
+  email: string;
+  picture?: string | null;
 }
 
 export default abstract class Auth {
   public static config (): void {
     GoogleAuth.config();
+    FacebookAuth.config();
   }
 }

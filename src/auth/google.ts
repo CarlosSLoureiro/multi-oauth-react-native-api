@@ -1,13 +1,19 @@
 import { type OAuth2Profile } from '@auth';
 
 import { type Request } from 'express';
-import passport from 'passport';
+import passport, { type Profile } from 'passport';
 import { Strategy, type VerifyCallback } from 'passport-google-oauth2';
 
 export default abstract class GoogleAuth {
-  private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: OAuth2Profile, done: VerifyCallback): void => {
-    request.body = profile;
-    done(null, profile);
+  private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback): void => {
+    const authUserProfile: OAuth2Profile = {
+      ...profile,
+      email: profile.emails[0].value,
+      picture: (profile.photos && profile.photos.length > 0) ? profile.photos[0].value : null
+    };
+
+    request.body = authUserProfile;
+    done(null, authUserProfile);
   };
 
   public static config (): void {

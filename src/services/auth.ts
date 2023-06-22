@@ -53,39 +53,30 @@ export default class AuthService {
   }
 
   public async authenticateWithOAuthProfile (profile: OAuth2Profile): Promise<AuthResponseInterface> {
-    if (profile.emails && profile.emails.length > 0) {
-      const email = profile.emails[0].value;
-      let user = await this.userRepository.findUserByEmail(email);
+    let user = await this.userRepository.findUserByEmail(profile.email);
 
-      let picture = null;
-
-      if (profile.photos && profile.photos.length > 0) {
-        picture = profile.photos[0].value;
-      }
-
-      if (user === null) {
-        user = await this.userRepository.create({
-          name: profile.displayName,
-          email,
-          picture
-        });
-      } else if (user.picture === null) {
-        user = await this.userRepository.update(user, { picture });
-      }
-
-      await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
-
-      return {
-        action: `auth`,
-        data: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          picture: user.picture,
-          token: getToken(user)
-        }
-      };
+    if (user === null) {
+      user = await this.userRepository.create({
+        name: profile.displayName,
+        email: profile.email,
+        picture: profile.picture || null
+      });
+    } else if (user.picture === null && profile.picture) {
+      user = await this.userRepository.update(user, { picture: profile.picture });
     }
+
+    await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
+
+    return {
+      action: `auth`,
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        token: getToken(user)
+      }
+    };
   }
 
   public async verifyUserByIdAndPassword (id: number, password: string | null): Promise<User> {
