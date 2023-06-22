@@ -38,6 +38,14 @@ export default abstract class AuthRoutes {
     swaggerPaths[route] = swaggerDataOAuth2.getCallback(`google`);
     router.get(route, passport.authenticate(`google`, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
+    route = `/auth/facebook`;
+    swaggerPaths[route] = swaggerDataOAuth2.getAuthWith(`facebook`);
+    router.get(route, setClientData, passport.authenticate(`facebook`, { scope: [`email`], session: false }));
+
+    route = `/auth/facebook/callback`;
+    swaggerPaths[route] = swaggerDataOAuth2.getCallback(`facebook`);
+    router.get(route, passport.authenticate(`facebook`, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+
     route = `/auth/error`;
     swaggerPaths[route] = swaggerDataAuthError;
     router.get(route, authController.error);
