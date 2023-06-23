@@ -40,7 +40,7 @@ export default abstract class AuthRoutes {
 
     route = `/auth/facebook`;
     swaggerPaths[route] = swaggerDataOAuth2.getAuthWith(`facebook`);
-    router.get(route, setClientData, passport.authenticate(`facebook`, { scope: [`email`], session: false }));
+    router.get(route, setClientData, passport.authenticate(`facebook`, { scope: [`public_profile`, `email`], session: false }));
 
     route = `/auth/facebook/callback`;
     swaggerPaths[route] = swaggerDataOAuth2.getCallback(`facebook`);

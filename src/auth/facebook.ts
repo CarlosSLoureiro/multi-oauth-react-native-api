@@ -20,6 +20,8 @@ export default abstract class FacebookAuth {
   };
 
   private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: any): void => {
+    console.log(`FacebookAuth.verify >`, profile);
+
     const authUserProfile: OAuth2Profile = {
       ...profile,
       email: profile.emails[0].value
@@ -30,8 +32,6 @@ export default abstract class FacebookAuth {
         authUserProfile.picture = picture;
       })
       .finally(() => {
-        console.log(`FacebookAuth.verify >`, profile);
-
         request.body = authUserProfile;
         done(null, authUserProfile);
       });
