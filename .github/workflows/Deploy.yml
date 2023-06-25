@@ -31,15 +31,15 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NAME: API for Multi OAuth2 with React Native
-      DIR: /var/carlos-loureiro/apis/multi-oauth2-react-native-api
-      IMAGE_NAME: multi-oauth2-react-native-api
-      SERVICE_NAME: multi-oauth2-react-native-api-service
+      NAME: API for Multi OAuth with React Native
+      DIR: /var/carlos-loureiro/apis/multi-oauth-react-native-api
+      IMAGE_NAME: multi-oauth-react-native-api
+      SERVICE_NAME: multi-oauth-react-native-api-service
       REPLICAS: 3
       PORT_CONTAINER: 80
       PORT_PROXY: 3000 # Porta usada no nginx para o proxy
-      API_DOMAIN: https://api-multi-oauth2-react-native.carlosloureiro.xyz
-      CLIENT_DOMAIN: https://web-multi-oauth2.carlosloureiro.xyz
+      API_DOMAIN: https://api-multi-oauth-react-native.carlosloureiro.xyz
+      CLIENT_DOMAIN: https://multi-oauth-react-native.carlosloureiro.xyz
 
     steps:
       - name: Checkout code
