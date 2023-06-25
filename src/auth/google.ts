@@ -7,7 +7,7 @@ import { Strategy, type VerifyCallback } from 'passport-google-oauth2';
 export default abstract class GoogleAuth {
   private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback): void => {
     const authUserProfile: OAuth2Profile = {
-      ...profile,
+      name: profile.displayName,
       email: profile.emails[0].value,
       picture: (profile.photos && profile.photos.length > 0) ? profile.photos[0].value : null
     };

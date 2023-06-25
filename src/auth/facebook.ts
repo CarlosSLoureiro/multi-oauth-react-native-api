@@ -20,10 +20,8 @@ export default abstract class FacebookAuth {
   };
 
   private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: any): void => {
-    console.log(`FacebookAuth.verify >`, profile);
-
     const authUserProfile: OAuth2Profile = {
-      ...profile,
+      name: profile.displayName,
       email: profile.emails[0].value
     };
 

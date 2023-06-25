@@ -57,7 +57,7 @@ export default class AuthService {
 
     if (user === null) {
       user = await this.userRepository.create({
-        name: profile.displayName,
+        name: profile.name,
         email: profile.email,
         picture: profile.picture || null
       });

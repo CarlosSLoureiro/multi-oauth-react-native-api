@@ -12,7 +12,7 @@ import passport, { type Profile } from 'passport';
 export default abstract class TwitterAuth {
   private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: (a, b: OAuth2Profile) => void): void => {
     const authUserProfile: OAuth2Profile = {
-      ...profile,
+      name: profile.displayName,
       email: profile.emails[0].value,
       picture: (profile.photos && profile.photos.length > 0) ? profile.photos[0].value.replace(`_normal`, ``) : null
     };
