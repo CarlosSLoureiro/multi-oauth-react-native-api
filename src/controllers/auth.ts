@@ -6,7 +6,7 @@ import type User from '@models/user';
 
 import AuthService from '@services/auth';
 
-import { type OAuth2Profile } from '@auth';
+import { type OAuthProfile } from '@auth';
 
 import ControllersUtils from './utils';
 
@@ -31,7 +31,7 @@ export default class AuthController {
     try {
       const authService = container.get<AuthService>(AuthService);
 
-      const profile: OAuth2Profile = request.body;
+      const profile: OAuthProfile = request.body;
 
       const data = await authService.authenticateWithOAuthProfile(profile);
 

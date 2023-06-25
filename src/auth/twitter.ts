@@ -1,4 +1,4 @@
-import { type OAuth2Profile } from '@auth';
+import { type OAuthProfile } from '@auth';
 
 /*
     Due to lib passport-twitter having a dependency with a critical issue,
@@ -10,8 +10,8 @@ import { type Request } from 'express';
 import passport, { type Profile } from 'passport';
 
 export default abstract class TwitterAuth {
-  private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: (a, b: OAuth2Profile) => void): void => {
-    const authUserProfile: OAuth2Profile = {
+  private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: (a, b: OAuthProfile) => void): void => {
+    const authUserProfile: OAuthProfile = {
       name: profile.displayName,
       email: profile.emails[0].value,
       picture: (profile.photos && profile.photos.length > 0) ? profile.photos[0].value.replace(`_normal`, ``) : null

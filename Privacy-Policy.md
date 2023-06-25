@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Privacy Policy describes how personal information is collected, used, and protected when users utilize the Multi OAuth2 with React Native app. This project is a nonprofit, open-source, and educational application. By using this API, you agree to the collection and use of your information as described in this Privacy Policy.
+This Privacy Policy describes how personal information is collected, used, and protected when users utilize the Multi OAuth with React Native app. This project is a nonprofit, open-source, and educational application. By using this API, you agree to the collection and use of your information as described in this Privacy Policy.
 
 ## Collection and Use of Personal Information
 
@@ -12,7 +12,7 @@ This Privacy Policy describes how personal information is collected, used, and p
 
 ## Protection of Personal Information
 
-- The Multi OAuth2 with React Native app utilizes appropriate security measures to protect user's personal information. However, we cannot guarantee the complete security of information transmitted over the Internet.
+- The Multi OAuth with React Native app utilizes appropriate security measures to protect user's personal information. However, we cannot guarantee the complete security of information transmitted over the Internet.
 - The collected personal information will not be shared with third parties without the user's prior consent, except when required by law or necessary for the operation, maintenance, and continuous improvement of the API.
 
 ## Open Source
