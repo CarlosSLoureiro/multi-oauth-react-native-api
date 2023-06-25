@@ -10,6 +10,7 @@ import cors from 'cors';
 import Database from 'database';
 import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
+import session from 'express-session';
 
 export default class App {
   private readonly app: Application = express();
@@ -28,6 +29,8 @@ export default class App {
     this.app.use(cors({
       origin: `*`
     }));
+
+    this.app.use(session({ secret: process.env.API_SECRET }));
 
     this.app.use(express.json());
 

@@ -8,6 +8,8 @@ import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
+import { type OAuth2Profile } from '@auth';
+
 import GenericError from '@errors/generic.error';
 import ValidationError from '@errors/validation.error';
 
@@ -18,7 +20,6 @@ import { Activities } from './activity.types';
 import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
 import { StatusCodes } from 'http-status-codes';
-import { type Profile } from 'passport';
 
 @injectable()
 
@@ -51,40 +52,31 @@ export default class AuthService {
     };
   }
 
-  public async authenticateWithOAuthProfile (profile: Profile): Promise<AuthResponseInterface> {
-    if (profile.emails && profile.emails.length > 0) {
-      const email = profile.emails[0].value;
-      let user = await this.userRepository.findUserByEmail(email);
+  public async authenticateWithOAuthProfile (profile: OAuth2Profile): Promise<AuthResponseInterface> {
+    let user = await this.userRepository.findUserByEmail(profile.email);
 
-      let picture = null;
-
-      if (profile.photos && profile.photos.length > 0) {
-        picture = profile.photos[0].value;
-      }
-
-      if (user === null) {
-        user = await this.userRepository.create({
-          name: profile.displayName,
-          email,
-          picture
-        });
-      } else if (user.picture === null) {
-        user = await this.userRepository.update(user, { picture });
-      }
-
-      await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
-
-      return {
-        action: `auth`,
-        data: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          picture: user.picture,
-          token: getToken(user)
-        }
-      };
+    if (user === null) {
+      user = await this.userRepository.create({
+        name: profile.name,
+        email: profile.email,
+        picture: profile.picture || null
+      });
+    } else if (user.picture === null && profile.picture) {
+      user = await this.userRepository.update(user, { picture: profile.picture });
     }
+
+    await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
+
+    return {
+      action: `auth`,
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        token: getToken(user)
+      }
+    };
   }
 
   public async verifyUserByIdAndPassword (id: number, password: string | null): Promise<User> {

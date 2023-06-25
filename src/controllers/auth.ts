@@ -6,10 +6,11 @@ import type User from '@models/user';
 
 import AuthService from '@services/auth';
 
+import { type OAuth2Profile } from '@auth';
+
 import ControllersUtils from './utils';
 
 import { type NextFunction, type Request, type Response } from 'express';
-import { type Profile } from 'passport';
 
 @injectable()
 
@@ -30,7 +31,7 @@ export default class AuthController {
     try {
       const authService = container.get<AuthService>(AuthService);
 
-      const profile: Profile = request.body;
+      const profile: OAuth2Profile = request.body;
 
       const data = await authService.authenticateWithOAuthProfile(profile);
 

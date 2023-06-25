@@ -24,14 +24,16 @@ export default abstract class ControllersUtils {
         url = `myapptest://`;
       }
     } else {
+      const path = clientData?.webScreenRoute ? clientData.webScreenRoute : ``;
+
       if (clientData?.isDevelopment) {
-        url = request.headers.referer;
+        url = clientData.debuggerHost || CLIENT_DOMAIN;
         if (url.endsWith(`/`)) {
           url = url.slice(0, -1);
         }
-        url = `${url}${clientData.webScreenRoute}`;
+        url = `${url}${path}`;
       } else {
-        url = `${CLIENT_DOMAIN}${clientData.webScreenRoute}`;
+        url = `${CLIENT_DOMAIN}${path}`;
       }
     }
 
