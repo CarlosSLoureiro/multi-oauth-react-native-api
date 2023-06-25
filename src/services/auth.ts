@@ -8,7 +8,7 @@ import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
 import UserRepositoryInterface from '@repository/user.interface';
 
-import { type OAuth2Profile } from '@auth';
+import { type OAuthProfile } from '@auth';
 
 import GenericError from '@errors/generic.error';
 import ValidationError from '@errors/validation.error';
@@ -52,7 +52,7 @@ export default class AuthService {
     };
   }
 
-  public async authenticateWithOAuthProfile (profile: OAuth2Profile): Promise<AuthResponseInterface> {
+  public async authenticateWithOAuthProfile (profile: OAuthProfile): Promise<AuthResponseInterface> {
     let user = await this.userRepository.findUserByEmail(profile.email);
 
     if (user === null) {

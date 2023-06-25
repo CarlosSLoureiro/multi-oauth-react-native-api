@@ -3,7 +3,7 @@ import FacebookAuth from './facebook';
 import GoogleAuth from './google';
 import TwitterAuth from './twitter';
 
-export interface OAuth2Profile {
+export interface OAuthProfile {
   name: string;
   email: string;
   picture?: string | null;
