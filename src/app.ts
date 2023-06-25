@@ -30,7 +30,11 @@ export default class App {
       origin: `*`
     }));
 
-    this.app.use(session({ secret: process.env.API_SECRET }));
+    this.app.use(session({
+      secret: process.env.API_SECRET,
+      resave: true,
+      saveUninitialized: true
+    }));
 
     this.app.use(express.json());
 
