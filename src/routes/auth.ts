@@ -46,6 +46,14 @@ export default abstract class AuthRoutes {
     swaggerPaths[route] = swaggerDataOAuth2.getCallback(`facebook`);
     router.get(route, passport.authenticate(`facebook`, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
+    route = `/auth/twitter`;
+    swaggerPaths[route] = swaggerDataOAuth2.getAuthWith(`twitter`);
+    router.get(route, setClientData, passport.authenticate(`twitter`, { session: false }));
+
+    route = `/auth/twitter/callback`;
+    swaggerPaths[route] = swaggerDataOAuth2.getCallback(`twitter`);
+    router.get(route, passport.authenticate(`twitter`, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+
     route = `/auth/error`;
     swaggerPaths[route] = swaggerDataAuthError;
     router.get(route, authController.error);

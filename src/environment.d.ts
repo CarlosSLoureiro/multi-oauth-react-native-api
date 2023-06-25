@@ -30,6 +30,9 @@ declare global {
 
       FACEBOOK_CLIENT_ID: string;
       FACEBOOK_CLIENT_SECRET: string;
+
+      TWITTER_CONSUMER_KEY: string;
+      TWITTER_CONSUMER_SECRET: string;
     }
   }
 }
