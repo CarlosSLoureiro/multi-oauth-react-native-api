@@ -8,8 +8,8 @@ export default {
     parameters: [
       {
         in: `path`,
-        name: `thirdParty`,
-        description: `The third party OAuth name`,
+        name: `provider`,
+        description: `The OAuth provider name`,
         required: true,
         example: `google`,
         schema: {
@@ -20,7 +20,7 @@ export default {
     ],
     responses: {
       [StatusCodes.TEMPORARY_REDIRECT]: {
-        description: `The OAuth authorization form will bring the user data to this route after confirmation. This route will redirect the user to client with encrypted data query as user authentication data (same as auth route: user id, name, email, picture and authentication token)`,
+        description: `The OAuth provider authorization form will bring the user data to this route after confirmation. This route will redirect the user to client with encrypted data query as user authentication data (same as auth route: user id, name, email, picture and authentication token)`,
         headers: {
           Location: {
             description: `https://web-version-app.carlosloureiro.xyz/?data=ENCRYPTED_DATA | exp://DEBUGGER_HOST/--/?data=ENCRYPTED_DATA`

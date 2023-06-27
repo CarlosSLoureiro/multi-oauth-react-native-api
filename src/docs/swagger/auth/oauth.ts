@@ -2,14 +2,14 @@ import { StatusCodes } from 'http-status-codes';
 
 export default {
   get: {
-    summary: `OAuth authentication route.`,
+    summary: `OAuth route.`,
     tags: [`Authentication`],
     security: [],
     parameters: [
       {
         in: `path`,
-        name: `thirdParty`,
-        description: `The third party oauth name`,
+        name: `provider`,
+        description: `The OAuth provider name`,
         required: true,
         example: `google`,
         schema: {
@@ -29,7 +29,7 @@ export default {
     ],
     responses: {
       [StatusCodes.TEMPORARY_REDIRECT]: {
-        description: `This route will redirect the user to OAuth authorization form from third party to continue the authentication.`,
+        description: `This route will redirect the user to OAuth authorization form provider to continue the authentication.`,
         headers: {
           Location: {
             description: `OAuth authentication route`
