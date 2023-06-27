@@ -7,6 +7,7 @@ import swaggerDataAuth from '@docs/swagger/auth/auth';
 import swaggerDataAuthCheck from '@docs/swagger/auth/check';
 import swaggerDataAuthError from '@docs/swagger/auth/error';
 import swaggerDataOAuth from '@docs/swagger/auth/oauth';
+import swaggerDataOAuthCallback from '@docs/swagger/auth/oauth.callback';
 
 import setClientData from '@utils/client-data/set';
 
@@ -30,29 +31,20 @@ export default abstract class AuthRoutes {
     swaggerPaths[route] = swaggerDataAuthCheck;
     router.get(route, athenticatedMiddleware.handle, RoutesUtils.getAsync(authController.check));
 
-    route = `/auth/google`;
-    swaggerPaths[route] = swaggerDataOAuth.getAuthWith(`google`);
-    router.get(route, setClientData, passport.authenticate(`google`, { scope: [`profile`, `email`], session: false }));
+    swaggerPaths[`/auth/{thirdParty}`] = swaggerDataOAuth;
+    swaggerPaths[`/auth/{thirdParty}/callback`] = swaggerDataOAuthCallback;
 
-    route = `/auth/google/callback`;
-    swaggerPaths[route] = swaggerDataOAuth.getCallback(`google`);
-    router.get(route, passport.authenticate(`google`, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+    route = `google`;
+    router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { scope: [`profile`, `email`], session: false }));
+    router.get(`/auth/${route}/callback`, passport.authenticate(route, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
-    route = `/auth/facebook`;
-    swaggerPaths[route] = swaggerDataOAuth.getAuthWith(`facebook`);
-    router.get(route, setClientData, passport.authenticate(`facebook`, { scope: [`public_profile`, `email`], session: false }));
+    route = `facebook`;
+    router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { scope: [`public_profile`, `email`], session: false }));
+    router.get(`/auth/${route}/callback`, passport.authenticate(route, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
-    route = `/auth/facebook/callback`;
-    swaggerPaths[route] = swaggerDataOAuth.getCallback(`facebook`);
-    router.get(route, passport.authenticate(`facebook`, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
-
-    route = `/auth/twitter`;
-    swaggerPaths[route] = swaggerDataOAuth.getAuthWith(`twitter`);
-    router.get(route, setClientData, passport.authenticate(`twitter`, { session: false }));
-
-    route = `/auth/twitter/callback`;
-    swaggerPaths[route] = swaggerDataOAuth.getCallback(`twitter`);
-    router.get(route, passport.authenticate(`twitter`, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+    route = `twitter`;
+    router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { session: false }));
+    router.get(`/auth/${route}/callback`, passport.authenticate(route, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
     route = `/auth/error`;
     swaggerPaths[route] = swaggerDataAuthError;
