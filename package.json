@@ -1,6 +1,6 @@
 {
   "name": "api-multi-oauth-react-native",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "author": "Carlos Loureiro",
   "scripts": {
     "test": "tsc --noEmit && eslint --ignore-path .gitignore . --fix --quiet",
