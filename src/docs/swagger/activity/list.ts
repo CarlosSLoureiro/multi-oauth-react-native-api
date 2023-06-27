@@ -14,6 +14,7 @@ export default {
         in: `path`
       }
     ],
+    security: [],
     responses: {
       [StatusCodes.OK]: {
         description: `Success`,
