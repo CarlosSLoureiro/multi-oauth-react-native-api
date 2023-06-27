@@ -1,4 +1,4 @@
-import { type OAuthProfile } from '@auth';
+import { type OAuthProfile, OAuthProviders } from '@auth';
 
 import { type Request } from 'express';
 import passport, { type Profile } from 'passport';
@@ -9,7 +9,8 @@ export default abstract class GoogleAuth {
     const authUserProfile: OAuthProfile = {
       name: profile.displayName,
       email: profile.emails[0].value,
-      picture: (profile.photos && profile.photos.length > 0) ? profile.photos[0].value : null
+      picture: (profile.photos && profile.photos.length > 0) ? profile.photos[0].value : null,
+      provider: OAuthProviders.GOOGLE
     };
 
     request.body = authUserProfile;

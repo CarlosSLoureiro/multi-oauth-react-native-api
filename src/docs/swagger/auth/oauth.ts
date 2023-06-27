@@ -1,3 +1,5 @@
+import { OAuthProviders } from '@auth';
+
 import { StatusCodes } from 'http-status-codes';
 
 export default {
@@ -11,10 +13,10 @@ export default {
         name: `provider`,
         description: `The OAuth provider name`,
         required: true,
-        example: `google`,
+        example: OAuthProviders.GOOGLE,
         schema: {
           type: `string`,
-          enum: [`google`, `facenook`, `twitter`]
+          enum: Object.values(OAuthProviders)
         }
       },
       {

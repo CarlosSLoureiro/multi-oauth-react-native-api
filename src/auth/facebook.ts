@@ -1,5 +1,5 @@
 
-import { type OAuthProfile } from '@auth';
+import { type OAuthProfile, OAuthProviders } from '@auth';
 
 import { type Request } from 'express';
 import passport, { type Profile } from 'passport';
@@ -22,7 +22,8 @@ export default abstract class FacebookAuth {
   private static readonly verify = (request: Request, accessToken: string, refreshToken: string, profile: Profile, done: any): void => {
     const authUserProfile: OAuthProfile = {
       name: profile.displayName,
-      email: profile.emails[0].value
+      email: profile.emails[0].value,
+      provider: OAuthProviders.FACEBOOK
     };
 
     FacebookAuth.getProfilePicture(profile, accessToken)

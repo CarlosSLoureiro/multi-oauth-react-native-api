@@ -3,6 +3,8 @@ import container from '@container';
 import AuthController from '@controllers/auth';
 import AuthenticatedMiddleware from '@middlewares/authenticated';
 
+import { OAuthProviders } from '@auth';
+
 import swaggerDataAuth from '@docs/swagger/auth/auth';
 import swaggerDataAuthCheck from '@docs/swagger/auth/check';
 import swaggerDataAuthError from '@docs/swagger/auth/error';
@@ -34,17 +36,14 @@ export default abstract class AuthRoutes {
     swaggerPaths[`/auth/{provider}`] = swaggerDataOAuth;
     swaggerPaths[`/auth/{provider}/callback`] = swaggerDataOAuthCallback;
 
-    route = `google`;
-    router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { scope: [`profile`, `email`], session: false }));
-    router.get(`/auth/${route}/callback`, passport.authenticate(route, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+    router.get(`/auth/${OAuthProviders.GOOGLE}`, setClientData, passport.authenticate(OAuthProviders.GOOGLE, { scope: [`profile`, `email`], session: false }));
+    router.get(`/auth/${OAuthProviders.GOOGLE}/callback`, passport.authenticate(OAuthProviders.GOOGLE, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
-    route = `facebook`;
-    router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { scope: [`public_profile`, `email`], session: false }));
-    router.get(`/auth/${route}/callback`, passport.authenticate(route, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+    router.get(`/auth/${OAuthProviders.FACEBOOK}`, setClientData, passport.authenticate(OAuthProviders.FACEBOOK, { scope: [`public_profile`, `email`], session: false }));
+    router.get(`/auth/${OAuthProviders.FACEBOOK}/callback`, passport.authenticate(OAuthProviders.FACEBOOK, { failureRedirect: `/auth/error`, session: false }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
-    route = `twitter`;
-    router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { session: false }));
-    router.get(`/auth/${route}/callback`, passport.authenticate(route, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+    router.get(`/auth/${OAuthProviders.TWITTER}`, setClientData, passport.authenticate(OAuthProviders.TWITTER, { session: false }));
+    router.get(`/auth/${OAuthProviders.TWITTER}/callback`, passport.authenticate(OAuthProviders.TWITTER, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
     route = `/auth/error`;
     swaggerPaths[route] = swaggerDataAuthError;
