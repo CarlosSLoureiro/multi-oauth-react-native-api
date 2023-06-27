@@ -31,8 +31,8 @@ export default abstract class AuthRoutes {
     swaggerPaths[route] = swaggerDataAuthCheck;
     router.get(route, athenticatedMiddleware.handle, RoutesUtils.getAsync(authController.check));
 
-    swaggerPaths[`/auth/{thirdParty}`] = swaggerDataOAuth;
-    swaggerPaths[`/auth/{thirdParty}/callback`] = swaggerDataOAuthCallback;
+    swaggerPaths[`/auth/{provider}`] = swaggerDataOAuth;
+    swaggerPaths[`/auth/{provider}/callback`] = swaggerDataOAuthCallback;
 
     route = `google`;
     router.get(`/auth/${route}`, setClientData, passport.authenticate(route, { scope: [`profile`, `email`], session: false }));
