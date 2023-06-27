@@ -65,7 +65,7 @@ export default class AuthService {
       user = await this.userRepository.update(user, { picture: profile.picture });
     }
 
-    await this.activityRepository.create(user, Activities.LOGIN_WITH_GOOGLE);
+    await this.activityRepository.create(user, Activities.LOGIN_WITH_PROVIDER.replace(`@provider`, profile.provider));
 
     return {
       action: `auth`,
