@@ -38,8 +38,8 @@ export default class App {
 
     this.app.use(session({
       secret: process.env.API_SECRET,
-      resave: false,
-      saveUninitialized: false
+      resave: true,
+      saveUninitialized: true
     }));
 
     this.app.use(express.json());
