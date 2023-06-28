@@ -2,7 +2,7 @@ import GenericError from "./generic.error";
 import SequelizeError from "./sequelize.error";
 import ValidationError from "./validation.error";
 
-import * as Sentry from '@sentry/node';
+import Sentry from '@sentry/node';
 import { type NextFunction, type Request, type Response } from "express";
 
 export default (error: any, request: Request, response: Response, next: NextFunction): void => {

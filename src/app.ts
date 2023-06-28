@@ -5,13 +5,15 @@ import Routes from '@routes';
 
 import errorsHandler from '@errors/handler';
 
-import * as Sentry from '@sentry/node';
+import Sentry from '@sentry/node';
+import RedisStore from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import Database from 'database';
 import doenv from 'dotenv';
 import express, { type Application, Router } from 'express';
 import session from 'express-session';
+import Redis from 'ioredis';
 
 export default class App {
   private readonly app: Application = express();
@@ -36,11 +38,23 @@ export default class App {
       origin: `*`
     }));
 
-    this.app.use(session({
-      secret: process.env.API_SECRET,
-      resave: true,
-      saveUninitialized: true
-    }));
+    if (process.env.API_ENV === `production`) {
+      const redisClient = new Redis({ host: `redis`, port: 6379 });
+      const sessionStore = new RedisStore({ client: redisClient });
+
+      this.app.use(session({
+        store: sessionStore,
+        secret: process.env.API_SECRET,
+        resave: false,
+        saveUninitialized: false
+      }));
+    } else {
+      this.app.use(session({
+        secret: process.env.API_SECRET,
+        resave: false,
+        saveUninitialized: false
+      }));
+    }
 
     this.app.use(express.json());
 
