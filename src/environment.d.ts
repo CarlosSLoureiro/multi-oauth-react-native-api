@@ -17,13 +17,15 @@ declare global {
       API_PORT: number;
       API_SECRET: string;
 
-      CLIENT_DOMAIN: string;
-      CLIENT_SALT: string;
-
       MYSQL_HOST: string;
       MYSQL_USER: string;
       MYSQL_PASS: string;
       MYSQL_BASE: string;
+
+      CLIENT_DOMAIN: string;
+      CLIENT_SALT: string;
+
+      SENTRY_DSN: string;
 
       GOOGLE_CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;

@@ -5,6 +5,7 @@ import Routes from '@routes';
 
 import errorsHandler from '@errors/handler';
 
+import * as Sentry from '@sentry/node';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import Database from 'database';
@@ -19,6 +20,11 @@ export default class App {
 
   constructor () {
     doenv.config();
+
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      tracesSampleRate: 1.0
+    });
 
     void this.database.config();
 

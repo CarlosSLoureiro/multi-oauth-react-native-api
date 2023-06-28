@@ -89,6 +89,8 @@ jobs:
             echo CLIENT_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
             echo CLIENT_SALT=${{ secrets.CLIENT_SALT }} >> .env
 
+            echo SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
+
             echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
             echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
 
