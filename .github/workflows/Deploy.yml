@@ -76,7 +76,6 @@ jobs:
             echo API_ENV=production >> .env
 
             echo API_NAME=${{ env.NAME }} >> .env
-            echo API_VERSION=${{ steps.latest_tag.outputs.TAG }} >> .env
             echo API_DOMAIN=${{ env.API_DOMAIN }} >> .env
             echo API_PORT=${{ env.PORT_CONTAINER }} >> .env
             echo API_SECRET=${{ secrets.API_SECRET }} >> .env
@@ -85,6 +84,9 @@ jobs:
             echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .env
             echo MYSQL_PASS=${{ secrets.MYSQL_PASS }} >> .env
             echo MYSQL_BASE=${{ secrets.MYSQL_BASE }} >> .env
+
+            echo REDIS_HOST=${{ secrets.REDIS_HOST }} >> .env
+            echo REDIS_PASS=${{ secrets.REDIS_PASS }} >> .env
 
             echo CLIENT_DOMAIN=${{ env.CLIENT_DOMAIN }} >> .env
             echo CLIENT_SALT=${{ secrets.CLIENT_SALT }} >> .env

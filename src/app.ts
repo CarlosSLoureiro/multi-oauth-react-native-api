@@ -5,7 +5,7 @@ import Routes from '@routes';
 
 import errorsHandler from '@errors/handler';
 
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 import RedisStore from 'connect-redis';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -39,7 +39,7 @@ export default class App {
     }));
 
     if (process.env.API_ENV === `production`) {
-      const redisClient = new Redis({ host: `redis`, port: 6379 });
+      const redisClient = new Redis({ host: process.env.REDIS_HOST, password: process.env.REDIS_PASS });
       const sessionStore = new RedisStore({ client: redisClient });
 
       this.app.use(session({

@@ -14,7 +14,7 @@ export function MountSwaggerConfig (swaggerPaths: object): [object, object] {
       openapi: `3.0.3`,
       info: {
         title: process.env.API_NAME,
-        version: process.env.API_VERSION
+        version: process.env.npm_package_version
       },
       paths: swaggerPaths,
       components: {

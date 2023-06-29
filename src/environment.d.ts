@@ -12,7 +12,6 @@ declare global {
       API_ENV: "production" | "development";
 
       API_NAME: string;
-      API_VERSION: string;
       API_DOMAIN: string;
       API_PORT: number;
       API_SECRET: string;
@@ -21,6 +20,9 @@ declare global {
       MYSQL_USER: string;
       MYSQL_PASS: string;
       MYSQL_BASE: string;
+
+      REDIS_HOST: string;
+      REDIS_PASS: string;
 
       CLIENT_DOMAIN: string;
       CLIENT_SALT: string;
