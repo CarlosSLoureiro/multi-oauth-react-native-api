@@ -69,5 +69,5 @@
         "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/no-extraneous-class": "off"
     },
-    "ignorePatterns": ["**/vendor/*"]
+    "ignorePatterns": ["jest.*.js", "**/vendor/*"]
 }
