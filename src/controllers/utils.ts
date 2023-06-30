@@ -21,7 +21,7 @@ export default abstract class ControllersUtils {
       if (clientData?.isDevelopment) {
         url = `exp://${clientData.debuggerHost}/--/`;
       } else {
-        url = `myapptest://`;
+        url = `multioauthapp://`;
       }
     } else {
       const path = clientData?.webScreenRoute ? clientData.webScreenRoute : ``;
