@@ -18,7 +18,6 @@ import Redis from 'ioredis';
 export default class App {
   private readonly app: Application = express();
   private readonly router: Router = Router();
-  private readonly database: Database = new Database();
 
   constructor () {
     doenv.config();
@@ -28,7 +27,7 @@ export default class App {
       tracesSampleRate: 1.0
     });
 
-    void this.database.config();
+    void Database.config();
 
     Auth.config();
 
