@@ -1,4 +1,4 @@
-import type ActivityRepositoryInterface from "./activity.interface";
+import type ActivityRepositoryInterface from "@repository/activity.interface";
 
 export default class ActivityRepositoryMock implements jest.Mocked<ActivityRepositoryInterface> {
   public create = jest.fn();

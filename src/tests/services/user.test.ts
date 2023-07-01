@@ -1,18 +1,18 @@
 import User from '@models/user';
 
+import ActivityRepositoryMock from '@mocks/activity.repository';
+import UserRepositoryMock from '@mocks/user.repository';
+
 import type UserChangePasswordRequest from '@requests/user.change-password';
 import type UserCreateRequest from '@requests/user.create';
+import { Activities } from '@services/activity.types';
 import UserService from '@services/user';
-import ActivityRepositoryMock from '@repository/activity.mock';
-import UserRepositoryMock from '@repository/user.mock';
+import { type UserResponseInterface } from '@services/user.types';
 
 import ValidationError from '@errors/validation.error';
 
 import getHashedUserPassword from '@utils/user-password/get';
 import getToken from '@utils/user-password/token';
-
-import { Activities } from './activity.types';
-import { type UserResponseInterface } from './user.types';
 
 import Database from 'database';
 import doenv from 'dotenv';

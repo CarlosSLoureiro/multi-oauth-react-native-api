@@ -1,8 +1,11 @@
 import User from '@models/user';
 
+import ActivityRepositoryMock from '@mocks/activity.repository';
+import UserRepositoryMock from '@mocks/user.repository';
+
+import { Activities } from '@services/activity.types';
 import AuthService from '@services/auth';
-import ActivityRepositoryMock from '@repository/activity.mock';
-import UserRepositoryMock from '@repository/user.mock';
+import { type AuthResponseInterface, type UserDataResponseInterface } from '@services/auth.types';
 
 import { type OAuthProfile, OAuthProviders } from '@auth';
 
@@ -11,9 +14,6 @@ import ValidationError from '@errors/validation.error';
 
 import getHashedUserPassword from '@utils/user-password/get';
 import getToken from '@utils/user-password/token';
-
-import { Activities } from './activity.types';
-import { type AuthResponseInterface, type UserDataResponseInterface } from './auth.types';
 
 import Database from 'database';
 import doenv from 'dotenv';

@@ -1,5 +1,6 @@
+import ActivityRepositoryMock from '@mocks/activity.repository';
+
 import ActivityService from '@services/activity';
-import ActivityRepositoryMock from '@repository/activity.mock';
 
 import Database from 'database';
 import doenv from 'dotenv';
