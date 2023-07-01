@@ -27,14 +27,15 @@
       "@docs/*": ["docs/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],
+      "@mocks/*": ["tests/mocks/*"],
       "@errors/*": ["errors/*"],
       "@repository/*": ["repositories/*"],
       "@requests/*": ["requests/*"],
       "@routes": ["routes/index"],
       "@routes/*": ["routes/*"],
       "@utils/*": ["utils/*"],
-      "@validators/*": ["validators/*"],
-    },
+      "@validators/*": ["validators/*"]
+    }
   },
   "include": [
     "src/**/*.ts"

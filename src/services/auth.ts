@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
 
-import type Activity from '@models/activity';
 import type User from '@models/user';
 
 import ActivityRepository from '@repository/activity';

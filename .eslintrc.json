@@ -35,6 +35,7 @@
                 ["@env", "@server", "@container"],
                 ["inversify"],
                 ["^@containers/?\\w", "^@models/?\\w"],
+                ["@mocks/?\\w"],
                 ["controller", "^@controllers/?\\w", "^@requests/?\\w", "^@services/?\\w", "^@repository/?\\w", "^@middlewares/?\\w"],
                 ["@auth", "@routes", "^@routes/?\\w"],
                 ["^@errors/?\\w"],
@@ -69,5 +70,5 @@
         "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/no-extraneous-class": "off"
     },
-    "ignorePatterns": ["**/vendor/*"]
+    "ignorePatterns": ["jest.*.js", "**/vendor/*"]
 }

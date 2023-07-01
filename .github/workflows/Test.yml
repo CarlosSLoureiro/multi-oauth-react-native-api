@@ -21,5 +21,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Copy Environment Variables
+        run: cp .env.example .env
+
       - name: Run Tests
         run: npm test
