@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 
 import type User from '@models/user';
 
+import type UserAuthRequest from '@requests/user.auth';
 import ActivityRepository from '@repository/activity';
 import ActivityRepositoryInterface from '@repository/activity.interface';
 import UserRepository from '@repository/user';
@@ -31,7 +32,9 @@ export default class AuthService {
     this.activityRepository = activityRepository;
   }
 
-  public async authenticateWithPassword (email: string, password: string): Promise<UserDataResponseInterface> {
+  public async authenticateWithPassword (data: UserAuthRequest): Promise<UserDataResponseInterface> {
+    const { email, password } = data;
+
     const user = await this.userRepository.findUserByEmail(email);
 
     if (!user) throw new ValidationError(`User not found`, [`email`]);

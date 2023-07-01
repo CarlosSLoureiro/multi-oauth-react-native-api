@@ -3,6 +3,7 @@ import User from '@models/user';
 import ActivityRepositoryMock from '@mocks/activity.repository';
 import UserRepositoryMock from '@mocks/user.repository';
 
+import type UserAuthRequest from '@requests/user.auth';
 import { Activities } from '@services/activity.types';
 import AuthService from '@services/auth';
 import { type AuthResponseInterface, type UserDataResponseInterface } from '@services/auth.types';
@@ -36,13 +37,15 @@ describe(`AuthService`, () => {
   describe(`authenticateWithPassword`, () => {
     it(`should authenticate a user with password`, async () => {
       // Arrange
-      const email = `loureiro.s.carlos@gmail.com`;
-      const password = `password123`;
+      const data: UserAuthRequest = {
+        email: `loureiro.s.carlos@gmail.com`,
+        password: `password123`
+      };
       const user: User = new User({
         id: 1,
         name: `Carlos Loureiro`,
-        email,
-        password: getHashedUserPassword(password)
+        email: data.email,
+        password: getHashedUserPassword(data.password)
       });
       const expectedResponse: UserDataResponseInterface = {
         id: user.id,
@@ -57,7 +60,7 @@ describe(`AuthService`, () => {
       mockActivityRepository.create.mockResolvedValue(null);
 
       // Act
-      const response = await authService.authenticateWithPassword(email, password);
+      const response = await authService.authenticateWithPassword(data);
 
       // Assert
       expect(response).toBeDefined();
@@ -67,21 +70,23 @@ describe(`AuthService`, () => {
       expect(response).toHaveProperty(`picture`, expectedResponse.picture);
       expect(response.token).toMatch(expressaoJWT);
 
-      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(email);
+      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(data.email);
       expect(mockActivityRepository.create).toHaveBeenCalledWith(user, Activities.LOGIN_WITH_PASSWORD);
     });
 
     it(`should throw a ValidationError if the user is not found`, async () => {
       // Arrange
-      const email = `nonexistent@gmail.com`;
-      const password = `password123`;
+      const data: UserAuthRequest = {
+        email: `nonexistent@gmail.com`,
+        password: `password123`
+      };
 
       // Mock
       mockUserRepository.findUserByEmail.mockResolvedValue(null);
 
       // Act
       try {
-        await authService.authenticateWithPassword(email, password);
+        await authService.authenticateWithPassword(data);
         fail(`authenticateWithPassword must throw ValidationError`);
       } catch (error) {
         expect(error).toBeInstanceOf(ValidationError);
@@ -89,18 +94,20 @@ describe(`AuthService`, () => {
       }
 
       // Assert
-      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(email);
+      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(data.email);
       expect(mockActivityRepository.create).not.toHaveBeenCalled();
     });
 
     it(`should throw a ValidationError if the user does not have a registered password`, async () => {
       // Arrange
-      const email = `loureiro.s.carlos@gmail.com`;
-      const password = `password123`;
+      const data: UserAuthRequest = {
+        email: `loureiro.s.carlos@gmail.com`,
+        password: `password123`
+      };
       const user: User = new User({
         id: 1,
         name: `Carlos Loureiro`,
-        email,
+        email: data.email,
         password: null
       });
 
@@ -109,7 +116,7 @@ describe(`AuthService`, () => {
 
       // Act
       try {
-        await authService.authenticateWithPassword(email, password);
+        await authService.authenticateWithPassword(data);
         fail(`authenticateWithPassword must throw ValidationError`);
       } catch (error) {
         expect(error).toBeInstanceOf(ValidationError);
@@ -117,18 +124,21 @@ describe(`AuthService`, () => {
       }
 
       // Assert
-      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(email);
+      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(data.email);
       expect(mockActivityRepository.create).not.toHaveBeenCalled();
     });
 
     it(`should throw a ValidationError if the password is incorrect`, async () => {
       // Arrange
-      const email = `loureiro.s.carlos@gmail.com`;
-      const password = `incorrect_password`;
+      const data: UserAuthRequest = {
+        email: `loureiro.s.carlos@gmail.com`,
+        password: `incorrect_password`
+      };
+
       const user: User = new User({
         id: 1,
         name: `Carlos Loureiro`,
-        email,
+        email: data.email,
         password: getHashedUserPassword(`password123`)
       });
 
@@ -137,7 +147,7 @@ describe(`AuthService`, () => {
 
       // Act
       try {
-        await authService.authenticateWithPassword(email, password);
+        await authService.authenticateWithPassword(data);
         fail(`authenticateWithPassword must throw ValidationError`);
       } catch (error) {
         expect(error).toBeInstanceOf(ValidationError);
@@ -145,7 +155,7 @@ describe(`AuthService`, () => {
       }
 
       // Assert
-      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(email);
+      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(data.email);
       expect(mockActivityRepository.create).not.toHaveBeenCalled();
     });
   });
