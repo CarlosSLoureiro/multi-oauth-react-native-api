@@ -1,163 +1,167 @@
-import Activity from '@models/activity';
 import User from '@models/user';
 
+import type UserChangePasswordRequest from '@requests/user.change-password';
+import type UserCreateRequest from '@requests/user.create';
 import UserService from '@services/user';
-import type ActivityRepositoryInterface from '@repository/activity.interface';
-import type UserRepositoryInterface from '@repository/user.interface';
+import ActivityRepositoryMock from '@repository/activity.mock';
+import UserRepositoryMock from '@repository/user.mock';
 
 import ValidationError from '@errors/validation.error';
 
+import getHashedUserPassword from '@utils/user-password/get';
+import getToken from '@utils/user-password/token';
+
 import { Activities } from './activity.types';
-import { type UserChangePasswordResponseInterface, type UserResponseInterface } from './user.types';
+import { type UserResponseInterface } from './user.types';
 
 import Database from 'database';
 import doenv from 'dotenv';
 
-// Mock das dependências UserRepositoryInterface e ActivityRepositoryInterface
-const mockUserRepository: jest.Mocked<UserRepositoryInterface> = {
-  findUserById: jest.fn(),
-  findUserByEmail: jest.fn(),
-  create: jest.fn(),
-  update: jest.fn()
-};
-
-const mockActivityRepository: jest.Mocked<ActivityRepositoryInterface> = {
-  create: jest.fn(),
-  findManyByPage: jest.fn()
-};
-
-// Criando instâncias dos mocks
-const userRepository = mockUserRepository as UserRepositoryInterface;
-const activityRepository = mockActivityRepository as ActivityRepositoryInterface;
-
 describe(`UserService`, () => {
+  let mockUserRepository: UserRepositoryMock;
+  let mockActivityRepository: ActivityRepositoryMock;
   let userService: UserService;
+  const expressaoJWT = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
 
   beforeEach(() => {
     doenv.config();
     Database.test();
 
-    userService = new UserService(userRepository, activityRepository);
+    mockUserRepository = new UserRepositoryMock();
+    mockActivityRepository = new ActivityRepositoryMock();
+
+    userService = new UserService(mockUserRepository, mockActivityRepository);
   });
 
   describe(`create`, () => {
     it(`should create a new user`, async () => {
-      // Mockando a resposta do UserRepository.findUserByEmail para simular que não há nenhum usuário com o mesmo email
-      mockUserRepository.findUserByEmail.mockResolvedValue(null);
-
-      // Mockando a resposta do UserRepository.create para retornar um usuário criado
-      const createdUser: User = new User();
-      createdUser.id = 1;
-      createdUser.name = `John Doe`;
-      createdUser.email = `john@example.com`;
-      mockUserRepository.create.mockResolvedValue(createdUser);
-
-      // Mockando a resposta do ActivityRepository.create
-      mockActivityRepository.create.mockResolvedValue(null);
-
+      // Arrange
       const requestData = {
-        name: `John Doe`,
-        email: `john@example.com`,
+        name: `Carlos Loureiro`,
+        email: `loureiro.s.carlos@gmail.com`,
         password: `password123`,
         confirmPassword: `password123`
       };
-
+      const createdUser: User = new User({
+        id: 1,
+        name: requestData.name,
+        email: requestData.email,
+        password: getHashedUserPassword(requestData.password)
+      });
       const expectedResponse: UserResponseInterface = {
         id: 1,
-        name: `John Doe`,
-        email: `john@example.com`,
+        name: requestData.name,
+        email: requestData.email,
         picture: null,
-        token: `generated_token`
+        token: getToken(createdUser)
       };
 
-      const response = await userService.create(requestData);
-      expect(response).toEqual(expectedResponse);
+      // Mock
+      mockUserRepository.findUserByEmail.mockResolvedValue(null);
+      mockUserRepository.create.mockResolvedValue(createdUser);
+      mockActivityRepository.create.mockResolvedValue(null);
 
-      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(`john@example.com`);
+      // Act
+      const response = await userService.create(requestData);
+
+      // Assert
+      expect(response).toBeDefined();
+      expect(response).toHaveProperty(`id`, expectedResponse.id);
+      expect(response).toHaveProperty(`name`, expectedResponse.name);
+      expect(response).toHaveProperty(`email`, expectedResponse.email);
+      expect(response).toHaveProperty(`picture`, expectedResponse.picture);
+      expect(response.token).toMatch(expressaoJWT);
+
+      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(requestData.email);
       expect(mockUserRepository.create).toHaveBeenCalledWith({
-        name: `John Doe`,
-        email: `john@example.com`,
+        name: requestData.name,
+        email: requestData.email,
         password: expect.any(String)
       });
       expect(mockActivityRepository.create).toHaveBeenCalledWith(createdUser, Activities.LOGIN_WITH_PASSWORD);
     });
 
     it(`should throw a ValidationError if the email address is already registered`, async () => {
-      // Mockando a resposta do UserRepository.findUserByEmail para simular que já existe um usuário com o mesmo email
-      const existingUser: User = new User();
-      existingUser.id = 1;
-      existingUser.name = `Jane Doe`;
-      existingUser.email = `john@example.com`;
-      mockUserRepository.findUserByEmail.mockResolvedValue(existingUser);
-
-      const requestData = {
-        name: `John Doe`,
-        email: `john@example.com`,
+      // Arrange
+      const existingUser: User = new User({
+        id: 1,
+        name: `Carlos Loureiro`,
+        email: `loureiro.s.carlos@gmail.com`,
+        password: getHashedUserPassword(`password123`)
+      });
+      const requestData: UserCreateRequest = {
+        name: `New Carlos Loureiro`,
+        email: existingUser.email,
         password: `password123`,
         confirmPassword: `password123`
       };
 
+      // Mock
+      mockUserRepository.findUserByEmail.mockResolvedValue(existingUser);
+
+      // Act
       await expect(userService.create(requestData)).rejects.toThrowError(ValidationError);
 
-      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(`john@example.com`);
+      // Assert
+      expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(existingUser.email);
       expect(mockUserRepository.create).not.toHaveBeenCalled();
       expect(mockActivityRepository.create).not.toHaveBeenCalled();
     });
   });
 
   describe(`changePassword`, () => {
-    it.skip(`should change the user password`, async () => {
-      const currentUser: User = new User();
-      currentUser.id = 1;
-      currentUser.name = `John Doe`;
-      currentUser.email = `john@example.com`;
-      currentUser.password = `old_password`;
-
-      // Mockando a resposta do UserRepository.update para retornar o usuário com a nova senha
-      const updatedUser: User = new User();
-      updatedUser.id = 1;
-      updatedUser.name = `John Doe`;
-      updatedUser.email = `john@example.com`;
-      updatedUser.password = `new_password`;
-      mockUserRepository.update.mockResolvedValue(updatedUser);
-
-      // Mockando a resposta do ActivityRepository.create
-      mockActivityRepository.create.mockResolvedValue(null);
-
-      const requestData = {
+    it(`should change the user password`, async () => {
+      // Arrange
+      const currentUser: User = new User({
+        id: 1,
+        name: `Carlos Loureiro`,
+        email: `loureiro.s.carlos@gmail.com`,
+        password: getHashedUserPassword(`old_password`)
+      });
+      const requestData: UserChangePasswordRequest = {
         currentPassword: `old_password`,
         newPassword: `new_password`,
         confirmPassword: `new_password`
       };
-
-      const expectedResponse: UserChangePasswordResponseInterface = {
-        token: `generated_token`
-      };
-
-      const response = await userService.changePassword(currentUser, requestData);
-      expect(response).toEqual(expectedResponse);
-
-      expect(mockUserRepository.update).toHaveBeenCalledWith(currentUser, {
-        password: expect.any(String)
+      const updatedUser: User = new User({
+        id: currentUser.id,
+        name: currentUser.name,
+        email: currentUser.email,
+        password: getHashedUserPassword(requestData.newPassword)
       });
+
+      // Mock
+      mockUserRepository.update.mockResolvedValue(updatedUser);
+      mockActivityRepository.create.mockResolvedValue(null);
+
+      // Act
+      const response = await userService.changePassword(currentUser, requestData);
+
+      // Assert
+      expect(response).toBeDefined();
+      expect(response.token).toMatch(expressaoJWT);
+      expect(mockUserRepository.update).toHaveBeenCalledWith(currentUser, { password: expect.any(String) });
       expect(mockActivityRepository.create).toHaveBeenCalledWith(updatedUser, Activities.NEW_PASSWORD);
     });
 
-    it.skip(`should throw a ValidationError if the current password is incorrect`, async () => {
-      const currentUser: User = new User();
-      currentUser.id = 1;
-      currentUser.name = `John Doe`;
-      currentUser.email = `john@example.com`;
-      currentUser.password = `old_password`;
-
-      const requestData = {
+    it(`should throw a ValidationError if the current password is incorrect`, async () => {
+      // Arramge
+      const currentUser: User = new User({
+        id: 1,
+        name: `Carlos Loureiro`,
+        email: `loureiro.s.carlos@gmail.com`,
+        password: getHashedUserPassword(`old_password`)
+      });
+      const requestData: UserChangePasswordRequest = {
         currentPassword: `incorrect_password`,
         newPassword: `new_password`,
         confirmPassword: `new_password`
       };
 
+      // Act
       await expect(userService.changePassword(currentUser, requestData)).rejects.toThrowError(ValidationError);
 
+      // Assert
       expect(mockUserRepository.update).not.toHaveBeenCalled();
       expect(mockActivityRepository.create).not.toHaveBeenCalled();
     });
