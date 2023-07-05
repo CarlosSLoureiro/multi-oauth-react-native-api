@@ -48,6 +48,9 @@ export default abstract class AuthRoutes {
     router.get(`/auth/${OAuthProviders.LINKEDIN}`, setClientData, passport.authenticate(OAuthProviders.LINKEDIN, { session: false }));
     router.get(`/auth/${OAuthProviders.LINKEDIN}/callback`, passport.authenticate(OAuthProviders.LINKEDIN, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
 
+    router.get(`/auth/${OAuthProviders.GITHUB}`, setClientData, passport.authenticate(OAuthProviders.GITHUB, { scope: [`user:email`], session: false }));
+    router.get(`/auth/${OAuthProviders.GITHUB}/callback`, passport.authenticate(OAuthProviders.GITHUB, { session: false, failureRedirect: `/auth/error` }), RoutesUtils.getAsync(authController.authenticateWithOAuthProfile));
+
     route = `/auth/error`;
     swaggerPaths[route] = swaggerDataAuthError;
     router.get(route, authController.error);
