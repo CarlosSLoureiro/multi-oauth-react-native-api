@@ -105,6 +105,9 @@ jobs:
             echo TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }} >> .env
             echo TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }} >> .env
 
+            echo LINKEDIN_CLIENT_ID=${{ secrets.LINKEDIN_CLIENT_ID }} >> .env
+            echo LINKEDIN_CLIENT_SECRET=${{ secrets.LINKEDIN_CLIENT_SECRET }} >> .env
+
       - name: Build Application Image
         uses: appleboy/ssh-action@v0.1.8
         with:
