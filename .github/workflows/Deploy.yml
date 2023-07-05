@@ -108,6 +108,9 @@ jobs:
             echo LINKEDIN_CLIENT_ID=${{ secrets.LINKEDIN_CLIENT_ID }} >> .env
             echo LINKEDIN_CLIENT_SECRET=${{ secrets.LINKEDIN_CLIENT_SECRET }} >> .env
 
+            echo GITHUB_CLIENT_ID=${{ secrets.APP_GITHUB_CLIENT_ID }} >> .env
+            echo GITHUB_CLIENT_SECRET=${{ secrets.APP_GITHUB_CLIENT_SECRET }} >> .env
+
       - name: Build Application Image
         uses: appleboy/ssh-action@v0.1.8
         with:

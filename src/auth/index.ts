@@ -1,5 +1,6 @@
 
 import FacebookAuth from './facebook';
+import GithubAuth from './github';
 import GoogleAuth from './google';
 import LinkedinAuth from './linkedin';
 import TwitterAuth from './twitter';
@@ -8,7 +9,8 @@ export enum OAuthProviders {
   GOOGLE = `google`,
   FACEBOOK = `facebook`,
   TWITTER = `twitter`,
-  LINKEDIN = `linkedin`
+  LINKEDIN = `linkedin`,
+  GITHUB = `github`
 }
 
 export interface OAuthProfile {
@@ -24,5 +26,6 @@ export default abstract class Auth {
     FacebookAuth.config();
     TwitterAuth.config();
     LinkedinAuth.config();
+    GithubAuth.config();
   }
 }
