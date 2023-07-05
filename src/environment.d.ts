@@ -37,6 +37,9 @@ declare global {
 
       TWITTER_CONSUMER_KEY: string;
       TWITTER_CONSUMER_SECRET: string;
+
+      LINKEDIN_CLIENT_ID: string;
+      LINKEDIN_CLIENT_SECRET: string;
     }
   }
 }
