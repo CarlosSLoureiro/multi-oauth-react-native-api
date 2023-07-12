@@ -100,7 +100,13 @@ describe(`UserService`, () => {
       mockUserRepository.findUserByEmail.mockResolvedValue(existingUser);
 
       // Act
-      await expect(userService.create(requestData)).rejects.toThrowError(ValidationError);
+      try {
+        await userService.create(requestData);
+        fail(`create must throw ValidationError`);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ValidationError);
+        expect(error.message).toEqual(`The email address is already registed`);
+      }
 
       // Assert
       expect(mockUserRepository.findUserByEmail).toHaveBeenCalledWith(existingUser.email);
@@ -159,7 +165,13 @@ describe(`UserService`, () => {
       };
 
       // Act
-      await expect(userService.changePassword(currentUser, requestData)).rejects.toThrowError(ValidationError);
+      try {
+        await userService.changePassword(currentUser, requestData);
+        fail(`changePassword must throw ValidationError`);
+      } catch (error) {
+        expect(error).toBeInstanceOf(ValidationError);
+        expect(error.message).toEqual(`The current password does not match`);
+      }
 
       // Assert
       expect(mockUserRepository.update).not.toHaveBeenCalled();
